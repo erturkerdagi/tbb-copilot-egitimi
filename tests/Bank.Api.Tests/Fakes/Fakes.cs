@@ -37,7 +37,7 @@ public class InMemoryTransferRepository : ITransferRepository
 
     public Task<decimal> GetTotalSentSinceAsync(int accountId, DateTime sinceUtc, CancellationToken ct) =>
         Task.FromResult(Items
-            .Where(t => t.FromAccountId == accountId && t.Status == TransferStatus.Completed && t.CreatedAtUtc >= sinceUtc)
+            .Where(t => t.FromAccountId == accountId && t.Status == TransferStatus.Completed && t.Kind == TransferKind.External && t.CreatedAtUtc >= sinceUtc)
             .Sum(t => t.Amount));
 
     public Task<IReadOnlyList<Transfer>> GetByAccountAsync(int accountId, CancellationToken ct) =>

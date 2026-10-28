@@ -75,5 +75,27 @@ Content-Type: application/json
   "description": "Negatif tutar"
 }
 
+### Kendi hesaplar arası virman: Ayşe vadesizden birikime 15.000 TL (limitten bağımsız, Modül 3)
+POST {{baseUrl}}/customers/1/internal-transfers
+Content-Type: application/json
+
+{
+  "fromAccountId": 1,
+  "toAccountId": 2,
+  "amount": 15000,
+  "description": "Birikime aktarım"
+}
+
+### Virman: başkasına ait hesap (404 dönmeli)
+POST {{baseUrl}}/customers/1/internal-transfers
+Content-Type: application/json
+
+{
+  "fromAccountId": 3,
+  "toAccountId": 1,
+  "amount": 100,
+  "description": "Mehmet'in hesabından çekme denemesi"
+}
+
 ### OpenAPI dokümanı
 GET {{baseUrl}}/openapi/v1.json

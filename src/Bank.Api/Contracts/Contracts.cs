@@ -24,6 +24,12 @@ public sealed record TransferRequest(
     decimal Amount,
     string? Description);
 
+public sealed record InternalTransferRequest(
+    int FromAccountId,
+    int ToAccountId,
+    decimal Amount,
+    string? Description);
+
 public sealed record TransferResponse(
     int Id,
     int FromAccountId,
@@ -32,4 +38,5 @@ public sealed record TransferResponse(
     string Currency,
     string? Description,
     string Status,
+    string Kind,
     DateTime CreatedAtUtc);

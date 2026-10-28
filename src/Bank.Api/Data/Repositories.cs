@@ -17,11 +17,13 @@ public class EfTransferRepository(BankDbContext db) : ITransferRepository
 
     public async Task<decimal> GetTotalSentSinceAsync(int accountId, DateTime sinceUtc, CancellationToken ct)
     {
+        // Yalnızca dış transferler limite sayılır; kendi hesaplar arası virman sayılmaz.
         // SQLite, decimal alanlarda SUM'ı veritabanında hesaplayamaz.
         // Bu yüzden tutarlar çekilip toplam bellekte hesaplanıyor.
         var amounts = await db.Transfers
             .Where(t => t.FromAccountId == accountId
                         && t.Status == TransferStatus.Completed
+                        && t.Kind == TransferKind.External
                         && t.CreatedAtUtc >= sinceUtc)
             .Select(t => t.Amount)
             .ToListAsync(ct);

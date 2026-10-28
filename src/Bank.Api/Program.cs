@@ -13,6 +13,7 @@ builder.Services.AddSingleton(TimeProvider.System);
 builder.Services.AddSingleton<TransferLimitChecker>();
 builder.Services.AddScoped<ITransferService, TransferService>();
 builder.Services.AddScoped<IAccountService, AccountService>();
+builder.Services.AddScoped<IInternalTransferService, InternalTransferService>();
 
 var app = builder.Build();
 
@@ -29,6 +30,7 @@ await app.InitializeBankDatabaseAsync();
 app.MapGet("/", () => Results.Ok(new { uygulama = "Erdağı Bank Hesap API", durum = "çalışıyor" }));
 app.MapAccountEndpoints();
 app.MapTransferEndpoints();
+app.MapCustomerEndpoints();
 
 app.Run();
 

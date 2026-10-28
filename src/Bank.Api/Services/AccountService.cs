@@ -59,5 +59,5 @@ public static class MappingExtensions
         new(a.Id, a.Iban, a.CustomerId, a.Currency, a.Balance, a.DailyTransferLimit);
 
     public static TransferResponse ToResponse(this Transfer t) =>
-        new(t.Id, t.FromAccountId, t.ToAccountId, t.Amount, t.Currency, t.Description, t.Status.ToString(), t.CreatedAtUtc);
+        new(t.Id, t.FromAccountId, t.ToAccountId, t.Amount, t.Currency, t.Description, t.Status.ToString(), t.Kind.ToString(), t.CreatedAtUtc);
 }
