@@ -1,0 +1,17 @@
+**/bin/
+**/obj/
+**/TestResults/
+**/*.db
+**/*.db-shm
+**/*.db-wal
+.git/
+.github/
+.vs/
+.vscode/
+.specify/
+specs/
+docs/
+legacy/
+tests/
+*.md
+.env

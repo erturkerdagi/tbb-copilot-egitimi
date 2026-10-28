@@ -1,0 +1,65 @@
+name: CI
+
+on:
+  # Tüm PR'larda (hedef branch fark etmeksizin) ve main'e push'ta çalışır
+  pull_request:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+# En az yetki ilkesi: workflow token'ı yalnızca depoyu okuyabilir.
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-test:
+    name: Derle ve test et
+    runs-on: ubuntu-latest
+    steps:
+      - name: Kodu al
+        uses: actions/checkout@v4
+
+      - name: .NET SDK kur (global.json'daki sürüm)
+        uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: global.json
+
+      - name: Paketleri geri yükle
+        run: dotnet restore ErdagiBank.slnx
+
+      - name: Derle
+        run: dotnet build ErdagiBank.slnx --no-restore -c Release
+
+      - name: Test et (kapsam raporuyla)
+        run: dotnet test ErdagiBank.slnx --no-build -c Release --collect:"XPlat Code Coverage" --results-directory ./TestResults
+
+      - name: Kapsam raporunu sakla
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: kapsam-raporu
+          path: TestResults/**/coverage.cobertura.xml
+          if-no-files-found: ignore
+
+  docker:
+    name: Docker image derle
+    runs-on: ubuntu-latest
+    needs: build-test
+    steps:
+      - name: Kodu al
+        uses: actions/checkout@v4
+
+      - name: Docker Buildx kur
+        uses: docker/setup-buildx-action@v3
+
+      - name: Image derle (push yok)
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: ./Dockerfile
+          push: false
+          tags: erdagibank/hesap-api:${{ github.sha }}
