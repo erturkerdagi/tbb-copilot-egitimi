@@ -14,6 +14,7 @@ public static class DataServiceExtensions
         services.AddScoped<IUnitOfWork>(sp => sp.GetRequiredService<BankDbContext>());
         services.AddScoped<IAccountRepository, EfAccountRepository>();
         services.AddScoped<ITransferRepository, EfTransferRepository>();
+        services.AddScoped<IPaymentInstructionRepository, EfPaymentInstructionRepository>();
 
         return services;
     }

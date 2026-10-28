@@ -12,6 +12,10 @@ public class BankDbContext(DbContextOptions<BankDbContext> options) : DbContext(
 
     public DbSet<Transfer> Transfers => Set<Transfer>();
 
+    public DbSet<PaymentInstruction> PaymentInstructions => Set<PaymentInstruction>();
+
+    public DbSet<PaymentInstructionRun> PaymentInstructionRuns => Set<PaymentInstructionRun>();
+
     Task IUnitOfWork.SaveChangesAsync(CancellationToken ct) => SaveChangesAsync(ct);
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -37,6 +41,19 @@ public class BankDbContext(DbContextOptions<BankDbContext> options) : DbContext(
             e.Property(t => t.Currency).HasMaxLength(3).IsRequired();
             e.Property(t => t.Description).HasMaxLength(140);
             e.HasIndex(t => new { t.FromAccountId, t.CreatedAtUtc });
+        });
+
+        modelBuilder.Entity<PaymentInstruction>(e =>
+        {
+            e.Property(i => i.Description).HasMaxLength(140);
+            e.HasIndex(i => i.CustomerId);
+        });
+
+        modelBuilder.Entity<PaymentInstructionRun>(e =>
+        {
+            e.Property(r => r.ErrorCode).HasMaxLength(100);
+            // Bir talimat aynı dönem için en fazla bir kez çalışır (spec 002, FR-009)
+            e.HasIndex(r => new { r.InstructionId, r.PeriodYear, r.PeriodMonth }).IsUnique();
         });
     }
 }
