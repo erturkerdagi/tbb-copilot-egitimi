@@ -1,0 +1,31 @@
+# .NET derleme çıktıları
+bin/
+obj/
+[Dd]ebug/
+[Rr]elease/
+*.user
+*.suo
+
+# Visual Studio / VS Code
+.vs/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+
+# Test ve kapsam çıktıları
+TestResults/
+coverage*/
+*.coverage
+coverage.cobertura.xml
+
+# Eski usul NuGet klasörü
+packages/
+
+# Demo veritabanı (her çalıştırmada yeniden oluşur)
+*.db
+*.db-shm
+*.db-wal
+
+# Gizli dosyalar
+.env
+*.pfx
