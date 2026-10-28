@@ -1,40 +1,55 @@
 using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
+using Microsoft.Data.SqlClient;
+using Microsoft.Extensions.Options;
 
 namespace EB.Legacy.Transfer
 {
     /// <summary>
     /// EFT talimatlarinin SQL Server'a kaydi.
-    /// (Demo ortaminda veritabani yoktur; host uygulamasi bu sinifi kullanmaz.)
+    /// (Modernizasyon: System.Data.SqlClient yerine Microsoft.Data.SqlClient, parametreli sorgular.)
+    /// Demo ortaminda veritabani yoktur; host uygulamasi bu sinifi kullanmaz.
     /// </summary>
     public class EftTalimatRepository
     {
+        private readonly string _baglanti;
+
+        public EftTalimatRepository(IOptions<EftIslemAyarlari> ayar)
+        {
+            _baglanti = ayar.Value.EftDbBaglantisi
+                        ?? throw new InvalidOperationException("EftIslem:EftDbBaglantisi tanimli degil.");
+        }
+
         public List<EftTalimati> GonderenIbanaGoreGetir(string iban)
         {
             List<EftTalimati> liste = new List<EftTalimati>();
 
-            using (SqlConnection con = new SqlConnection(Ayarlar.EftDbBaglantisi))
+            using (SqlConnection con = new SqlConnection(_baglanti))
             {
                 con.Open();
-                string sql = "SELECT TalimatNo, GonderenIban, AliciIban, AliciAdSoyad, Tutar, Kanal, Aciklama, TalimatTarihi " +
-                             "FROM EftTalimatlari WHERE GonderenIban = '" + iban + "' ORDER BY TalimatTarihi DESC";
-                SqlCommand cmd = new SqlCommand(sql, con);
-                SqlDataReader dr = cmd.ExecuteReader();
-                while (dr.Read())
+                const string sql = "SELECT TalimatNo, GonderenIban, AliciIban, AliciAdSoyad, Tutar, Kanal, Aciklama, TalimatTarihi " +
+                                   "FROM EftTalimatlari WHERE GonderenIban = @iban ORDER BY TalimatTarihi DESC";
+                using (SqlCommand cmd = new SqlCommand(sql, con))
                 {
-                    EftTalimati t = new EftTalimati();
-                    t.TalimatNo = dr["TalimatNo"].ToString();
-                    t.GonderenIban = dr["GonderenIban"].ToString();
-                    t.AliciIban = dr["AliciIban"].ToString();
-                    t.AliciAdSoyad = dr["AliciAdSoyad"].ToString();
-                    t.Tutar = Convert.ToDecimal(dr["Tutar"]);
-                    t.Kanal = dr["Kanal"].ToString();
-                    t.Aciklama = dr["Aciklama"].ToString();
-                    t.TalimatTarihi = Convert.ToDateTime(dr["TalimatTarihi"]);
-                    liste.Add(t);
+                    cmd.Parameters.AddWithValue("@iban", iban);
+                    using (SqlDataReader dr = cmd.ExecuteReader())
+                    {
+                        while (dr.Read())
+                        {
+                            liste.Add(new EftTalimati
+                            {
+                                TalimatNo = dr["TalimatNo"].ToString(),
+                                GonderenIban = dr["GonderenIban"].ToString(),
+                                AliciIban = dr["AliciIban"].ToString(),
+                                AliciAdSoyad = dr["AliciAdSoyad"].ToString(),
+                                Tutar = Convert.ToDecimal(dr["Tutar"]),
+                                Kanal = dr["Kanal"].ToString(),
+                                Aciklama = dr["Aciklama"].ToString(),
+                                TalimatTarihi = Convert.ToDateTime(dr["TalimatTarihi"])
+                            });
+                        }
+                    }
                 }
-                dr.Close();
             }
 
             return liste;
@@ -42,14 +57,20 @@ namespace EB.Legacy.Transfer
 
         public void SonucKaydet(EftSonuc s)
         {
-            using (SqlConnection con = new SqlConnection(Ayarlar.EftDbBaglantisi))
+            using (SqlConnection con = new SqlConnection(_baglanti))
             {
                 con.Open();
-                string sql = "INSERT INTO EftSonuclari (TalimatNo, Ucret, ToplamTutar, Durum, Mesaj, IslemZamani) VALUES ('" +
-                             s.TalimatNo + "', " + s.Ucret.ToString().Replace(",", ".") + ", " +
-                             s.ToplamTutar.ToString().Replace(",", ".") + ", '" + s.Durum + "', '" + s.Mesaj + "', GETDATE())";
-                SqlCommand cmd = new SqlCommand(sql, con);
-                cmd.ExecuteNonQuery();
+                const string sql = "INSERT INTO EftSonuclari (TalimatNo, Ucret, ToplamTutar, Durum, Mesaj, IslemZamani) " +
+                                   "VALUES (@no, @ucret, @toplam, @durum, @mesaj, SYSDATETIME())";
+                using (SqlCommand cmd = new SqlCommand(sql, con))
+                {
+                    cmd.Parameters.AddWithValue("@no", s.TalimatNo);
+                    cmd.Parameters.AddWithValue("@ucret", s.Ucret);
+                    cmd.Parameters.AddWithValue("@toplam", s.ToplamTutar);
+                    cmd.Parameters.AddWithValue("@durum", s.Durum);
+                    cmd.Parameters.AddWithValue("@mesaj", (object)s.Mesaj ?? DBNull.Value);
+                    cmd.ExecuteNonQuery();
+                }
             }
         }
     }

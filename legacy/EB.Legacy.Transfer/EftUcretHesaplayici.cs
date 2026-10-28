@@ -1,24 +1,30 @@
 using System;
+using Microsoft.Extensions.Options;
 
 namespace EB.Legacy.Transfer
 {
     /// <summary>
     /// EFT islem ucretini hesaplar.
-    /// Yazan: M.K. (2014) - Son degisiklik: tarife 2019
-    /// NOT: Ucret hesabi muhasebe ile mutabik, DEGISTIRMEYIN!
+    /// Yazan: M.K. (2014) - Son degisiklik: tarife 2019 - .NET 10 tasimasi: 2026
+    ///
+    /// BILINEN DAVRANISLAR (karakterizasyon testleriyle kilitlendi, is birimi karari bekleniyor):
+    ///  - Hesap double ile yapiliyor ve Math.Round varsayilan olarak "banker's rounding" kullaniyor.
+    ///    Ornek: 8.230 TL -> matematiksel 12,345 TL, sonuc 12,34 TL.
+    ///  - Kanal karsilastirmasi buyuk/kucuk harfe duyarli: "sube" yazilirsa sube ek ucreti eklenmiyor.
+    /// Tasima sirasinda davranis BILEREK degistirilmedi.
     /// </summary>
     public class EftUcretHesaplayici
     {
         private readonly EftUcretAyarlari _ayar;
 
-        public EftUcretHesaplayici()
-            : this(Ayarlar.EftUcretAyarlariniYukle())
+        public EftUcretHesaplayici(IOptions<EftUcretAyarlari> ayar)
+            : this(ayar.Value)
         {
         }
 
         public EftUcretHesaplayici(EftUcretAyarlari ayar)
         {
-            _ayar = ayar;
+            _ayar = ayar ?? throw new ArgumentNullException(nameof(ayar));
         }
 
         /// <param name="tutar">EFT tutari (TL)</param>
@@ -56,10 +62,6 @@ namespace EB.Legacy.Transfer
             {
                 ucret = ucret - (ucret * _ayar.MobilIndirimOrani);
             }
-
-            // 2016 internet kampanyasi - iptal edildi
-            //if (kanal == "INTERNET")
-            //    ucret = ucret * 0.9;
 
             return Convert.ToDecimal(Math.Round(ucret, 2));
         }

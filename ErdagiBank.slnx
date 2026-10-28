@@ -1,4 +1,9 @@
 <Solution>
+  <Folder Name="/legacy/">
+    <Project Path="legacy/EB.Legacy.Transfer.Host/EB.Legacy.Transfer.Host.csproj" />
+    <Project Path="legacy/EB.Legacy.Transfer.Tests/EB.Legacy.Transfer.Tests.csproj" />
+    <Project Path="legacy/EB.Legacy.Transfer/EB.Legacy.Transfer.csproj" />
+  </Folder>
   <Folder Name="/src/">
     <Project Path="src/Bank.Api/Bank.Api.csproj" />
   </Folder>

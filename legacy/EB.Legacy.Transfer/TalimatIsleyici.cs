@@ -1,53 +1,59 @@
 using System;
 using System.Collections.Generic;
+using Microsoft.Extensions.Options;
 
 namespace EB.Legacy.Transfer
 {
     /// <summary>
     /// Gun ici EFT talimatlarini isler: ucreti hesaplar, mesai kontrolu yapar.
+    /// (Modernizasyon: DateTime.Now yerine TimeProvider, ConfigurationManager yerine IOptions.)
     /// </summary>
     public class TalimatIsleyici
     {
-        private EftUcretHesaplayici hesaplayici;
+        private static readonly TimeSpan TurkiyeSaatFarki = TimeSpan.FromHours(3);
 
-        public TalimatIsleyici()
-        {
-            hesaplayici = new EftUcretHesaplayici();
-        }
+        private readonly EftUcretHesaplayici _hesaplayici;
+        private readonly EftIslemAyarlari _ayar;
+        private readonly TimeProvider _zaman;
 
-        public TalimatIsleyici(EftUcretHesaplayici h)
+        public TalimatIsleyici(EftUcretHesaplayici hesaplayici, IOptions<EftIslemAyarlari> ayar, TimeProvider zaman)
         {
-            hesaplayici = h;
+            _hesaplayici = hesaplayici;
+            _ayar = ayar.Value;
+            _zaman = zaman;
         }
 
         public List<EftSonuc> Isle(List<EftTalimati> talimatlar)
         {
             List<EftSonuc> sonuclar = new List<EftSonuc>();
 
+            // Eski kod sunucunun yerel saatini (Turkiye) kullaniyordu; ayni davranis acikca Turkiye saatiyle korunuyor.
+            DateTime simdi = _zaman.GetUtcNow().UtcDateTime + TurkiyeSaatFarki;
+
             foreach (EftTalimati t in talimatlar)
             {
                 EftSonuc s = new EftSonuc();
                 s.TalimatNo = t.TalimatNo;
                 s.Tutar = t.Tutar;
-                s.IslemZamani = DateTime.Now;
+                s.IslemZamani = simdi;
 
                 try
                 {
                     if (t.GonderenIban == null || t.GonderenIban.Length != 26 || !t.GonderenIban.StartsWith("TR"))
                     {
                         s.Durum = "HATA";
-                        s.Mesaj = "Gecersiz gonderen IBAN: " + t.GonderenIban;
+                        s.Mesaj = "Gecersiz gonderen IBAN"; // Modernizasyon: mesajdan IBAN cikarildi (kisisel veri)
                         sonuclar.Add(s);
                         continue;
                     }
 
-                    s.Ucret = hesaplayici.Hesapla(t.Tutar, t.Kanal);
+                    s.Ucret = _hesaplayici.Hesapla(t.Tutar, t.Kanal);
                     s.ToplamTutar = t.Tutar + s.Ucret;
 
                     // 17:00'dan sonra veya hafta sonu verilen talimatlar ertesi is gunu islenir
-                    if (DateTime.Now.Hour >= Ayarlar.MesaiBitisSaati
-                        || DateTime.Now.DayOfWeek == DayOfWeek.Saturday
-                        || DateTime.Now.DayOfWeek == DayOfWeek.Sunday)
+                    if (simdi.Hour >= _ayar.MesaiBitisSaati
+                        || simdi.DayOfWeek == DayOfWeek.Saturday
+                        || simdi.DayOfWeek == DayOfWeek.Sunday)
                     {
                         s.Durum = "ERTESI_GUN";
                         s.Mesaj = "Mesai disi talimat, ertesi is gunu islenecek";
@@ -58,7 +64,8 @@ namespace EB.Legacy.Transfer
                         s.Mesaj = "OK";
                     }
 
-                    Console.WriteLine("[EFT] " + t.TalimatNo + " " + t.AliciAdSoyad + " " + t.AliciIban + " tutar=" + t.Tutar + " ucret=" + s.Ucret);
+                    // Kisisel veri (ad, IBAN) artik konsola yazilmiyor
+                    Console.WriteLine("[EFT] " + t.TalimatNo + " tutar=" + t.Tutar + " ucret=" + s.Ucret);
                 }
                 catch (Exception ex)
                 {
