@@ -1,3 +1,4 @@
+using Bank.Api.Contracts;
 using Bank.Api.Services;
 
 namespace Bank.Api.Endpoints;
@@ -17,6 +18,12 @@ public static class AccountEndpoints
                 (await service.GetHistoryAsync(id, ct)).ToHttpResult())
             .WithName("GetAccountTransfers")
             .WithSummary("Hesabın transfer geçmişini getirir");
+
+        group.MapPost("/{id:int}/deposits", async (int id, DepositRequest request, IAccountService service, CancellationToken ct) =>
+                (await service.DepositAsync(id, request, ct))
+                    .ToHttpResult(deposit => Results.Created($"/accounts/{deposit.AccountId}", deposit)))
+            .WithName("CreateDeposit")
+            .WithSummary("Hesaba para yatırır");
 
         return app;
     }

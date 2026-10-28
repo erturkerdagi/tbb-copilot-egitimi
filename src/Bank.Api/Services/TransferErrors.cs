@@ -31,3 +31,15 @@ public static class AccountErrors
     public static readonly Error NotFound =
         new("account.not_found", "Hesap bulunamadı.", ErrorType.NotFound);
 }
+
+public static class DepositErrors
+{
+    /// <summary>Tek seferde yatırılabilecek en yüksek tutar.</summary>
+    public const decimal MaxSingleDeposit = 1_000_000m;
+
+    public static readonly Error InvalidAmount =
+        new("deposit.invalid_amount", "Yatırılacak tutar sıfırdan büyük olmalıdır.", ErrorType.Validation);
+
+    public static readonly Error AmountTooLarge =
+        new("deposit.amount_too_large", "Tek seferde en fazla 1.000.000 yatırılabilir.", ErrorType.Validation);
+}

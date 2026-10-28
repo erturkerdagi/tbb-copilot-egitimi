@@ -57,5 +57,23 @@ Content-Type: application/json
   "description": "Para birimi uyumsuzluğu"
 }
 
+### Hesaba para yatırma (Modül 2'de eklendi)
+POST {{baseUrl}}/accounts/3/deposits
+Content-Type: application/json
+
+{
+  "amount": 2500,
+  "description": "Maaş"
+}
+
+### Para yatırma: geçersiz tutar
+POST {{baseUrl}}/accounts/3/deposits
+Content-Type: application/json
+
+{
+  "amount": -10,
+  "description": "Negatif tutar"
+}
+
 ### OpenAPI dokümanı
 GET {{baseUrl}}/openapi/v1.json

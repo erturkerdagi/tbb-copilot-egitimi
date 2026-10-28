@@ -8,6 +8,16 @@ public sealed record AccountResponse(
     decimal Balance,
     decimal DailyTransferLimit);
 
+public sealed record DepositRequest(
+    decimal Amount,
+    string? Description);
+
+public sealed record DepositResponse(
+    int AccountId,
+    decimal Amount,
+    decimal NewBalance,
+    DateTime CreatedAtUtc);
+
 public sealed record TransferRequest(
     int FromAccountId,
     int ToAccountId,
