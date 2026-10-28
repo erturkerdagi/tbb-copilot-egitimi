@@ -97,5 +97,9 @@ Content-Type: application/json
   "description": "Mehmet'in hesabından çekme denemesi"
 }
 
+### Hesap ekstresi (dış ekip PR'ı)
+GET {{baseUrl}}/accounts/1/statement?search=Kira
+X-Customer-Id: 1
+
 ### OpenAPI dokümanı
 GET {{baseUrl}}/openapi/v1.json
