@@ -53,9 +53,9 @@ public class TransferService(
             return Result<TransferResponse>.Failure(TransferErrors.InsufficientBalance);
         }
 
-        // Basitlik için gün başlangıcı UTC olarak alınıyor.
+        // Günlük limit Türkiye saatine göre gece yarısında sıfırlanır.
         var now = timeProvider.GetUtcNow().UtcDateTime;
-        var startOfDayUtc = now.Date;
+        var startOfDayUtc = BankCalendar.StartOfBankDayUtc(now);
         var sentToday = await transfers.GetTotalSentSinceAsync(from.Id, startOfDayUtc, ct);
 
         if (!limitChecker.IsWithinDailyLimit(request.Amount, sentToday, from.DailyTransferLimit))

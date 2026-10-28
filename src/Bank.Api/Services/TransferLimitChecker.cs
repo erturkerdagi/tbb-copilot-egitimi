@@ -9,9 +9,9 @@ public class TransferLimitChecker
     /// <param name="amount">Gönderilmek istenen tutar.</param>
     /// <param name="alreadySentToday">Bugün bu hesaptan daha önce gönderilen toplam tutar.</param>
     /// <param name="dailyLimit">Hesabın günlük transfer limiti.</param>
-    /// <returns>Transfer limit içindeyse true.</returns>
+    /// <returns>Transfer limit içindeyse (limite tam eşit olması dahil) true.</returns>
     public bool IsWithinDailyLimit(decimal amount, decimal alreadySentToday, decimal dailyLimit)
     {
-        return alreadySentToday + amount < dailyLimit;
+        return alreadySentToday + amount <= dailyLimit;
     }
 }
