@@ -1,0 +1,61 @@
+### Erdağı Bank Hesap API — örnek istekler
+# VS Code'da "REST Client" eklentisiyle her isteğin üstündeki "Send Request" yazısına tıklayın.
+
+@baseUrl = http://localhost:5080
+
+### Uygulama ayakta mı?
+GET {{baseUrl}}/
+
+### Ayşe'nin vadesiz hesabı (Id = 1)
+GET {{baseUrl}}/accounts/1
+
+### Ayşe'nin vadesiz hesabının transfer geçmişi
+GET {{baseUrl}}/accounts/1/transfers
+
+### Ayşe'den Mehmet'e 1.000 TL transfer (başarılı olmalı)
+POST {{baseUrl}}/transfers
+Content-Type: application/json
+
+{
+  "fromAccountId": 1,
+  "toAccountId": 3,
+  "amount": 1000,
+  "description": "Kira payı"
+}
+
+### MÜŞTERİ ŞİKÂYETİ: Limit 10.000 TL, tam 10.000 TL gönderilemiyor
+# (Uygulamayı yeniden başlatıp önce bu isteği gönderin)
+POST {{baseUrl}}/transfers
+Content-Type: application/json
+
+{
+  "fromAccountId": 2,
+  "toAccountId": 3,
+  "amount": 10000,
+  "description": "Limit dahil transfer"
+}
+
+### Yetersiz bakiye (Mehmet'in hesabında 5.000 TL var)
+POST {{baseUrl}}/transfers
+Content-Type: application/json
+
+{
+  "fromAccountId": 3,
+  "toAccountId": 1,
+  "amount": 7500,
+  "description": "Yetersiz bakiye denemesi"
+}
+
+### Farklı para birimi (TL hesaptan EUR hesaba)
+POST {{baseUrl}}/transfers
+Content-Type: application/json
+
+{
+  "fromAccountId": 4,
+  "toAccountId": 5,
+  "amount": 100,
+  "description": "Para birimi uyumsuzluğu"
+}
+
+### OpenAPI dokümanı
+GET {{baseUrl}}/openapi/v1.json

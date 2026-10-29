@@ -1,0 +1,9 @@
+[
+  { "TalimatNo": "EFT-0001", "GonderenIban": "TR330006100519786457841326", "AliciIban": "TR960006400000112345678901", "AliciAdSoyad": "Mehmet Demir", "Tutar": 750, "Kanal": "INTERNET", "Aciklama": "Aidat" },
+  { "TalimatNo": "EFT-0002", "GonderenIban": "TR330006100519786457841326", "AliciIban": "TR470001000100000000012345", "AliciAdSoyad": "Zeynep Kaya", "Tutar": 8230, "Kanal": "INTERNET", "Aciklama": "Fatura" },
+  { "TalimatNo": "EFT-0003", "GonderenIban": "TR320010009999901234567890", "AliciIban": "TR960006400000112345678901", "AliciAdSoyad": "Mehmet Demir", "Tutar": 8230, "Kanal": "MOBIL", "Aciklama": "Borc" },
+  { "TalimatNo": "EFT-0004", "GonderenIban": "TR470001000100000000012345", "AliciIban": "TR330006100519786457841326", "AliciAdSoyad": "Ayse Yilmaz", "Tutar": 2500, "Kanal": "SUBE", "Aciklama": "Odeme" },
+  { "TalimatNo": "EFT-0005", "GonderenIban": "TR470001000100000000012345", "AliciIban": "TR330006100519786457841326", "AliciAdSoyad": "Ayse Yilmaz", "Tutar": 2500, "Kanal": "sube", "Aciklama": "Odeme (kucuk harf kanal)" },
+  { "TalimatNo": "EFT-0006", "GonderenIban": "TR320010009999901234567890", "AliciIban": "TR470001000100000000012345", "AliciAdSoyad": "Zeynep Kaya", "Tutar": 250000, "Kanal": "INTERNET", "Aciklama": "Konut pesinati" },
+  { "TalimatNo": "EFT-0007", "GonderenIban": "TR1234", "AliciIban": "TR470001000100000000012345", "AliciAdSoyad": "Zeynep Kaya", "Tutar": 100, "Kanal": "MOBIL", "Aciklama": "Hatali IBAN" }
+]
