@@ -97,5 +97,38 @@ Content-Type: application/json
   "description": "Mehmet'in hesabından çekme denemesi"
 }
 
+### ATÖLYE: Ayşe her ayın 5'inde Mehmet'e 1.500 TL kira talimatı verir
+POST {{baseUrl}}/customers/1/payment-instructions
+Content-Type: application/json
+
+{
+  "fromAccountId": 1,
+  "toAccountId": 3,
+  "amount": 1500,
+  "dayOfMonth": 5,
+  "description": "Kira"
+}
+
+### ATÖLYE: Ayın 31'i talimatı (kısa aylarda ayın son günü)
+POST {{baseUrl}}/customers/1/payment-instructions
+Content-Type: application/json
+
+{
+  "fromAccountId": 2,
+  "toAccountId": 4,
+  "amount": 750,
+  "dayOfMonth": 31,
+  "description": "Aidat"
+}
+
+### ATÖLYE: Ayşe'nin talimatları
+GET {{baseUrl}}/customers/1/payment-instructions
+
+### ATÖLYE: 5 Kasım 2026 (Perşembe) gün sonu çalıştırması
+POST {{baseUrl}}/payment-instructions/run?date=2026-11-05
+
+### ATÖLYE: Aynı gün tekrar çalıştırma (hiçbir şey yapmamalı)
+POST {{baseUrl}}/payment-instructions/run?date=2026-11-05
+
 ### OpenAPI dokümanı
 GET {{baseUrl}}/openapi/v1.json
