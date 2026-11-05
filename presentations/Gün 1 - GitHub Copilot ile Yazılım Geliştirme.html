@@ -1,0 +1,1087 @@
+<!doctype html>
+<html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Gün 1 — GitHub Copilot ile Yazılım Geliştirme</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>*{box-sizing:border-box;margin:0;padding:0}html,body{height:100%;background:#0B1324;overflow:hidden;font-family:'IBM Plex Sans',Arial,sans-serif}
+#stage{position:absolute;left:50%;top:calc(50% - 28px);width:1920px;height:1080px;transform-origin:center center}
+.slide{position:absolute;inset:0;width:1920px;height:1080px;overflow:hidden;visibility:hidden}.slide.on{visibility:visible}
+#bar{position:fixed;left:0;right:0;bottom:0;display:flex;align-items:center;justify-content:center;gap:14px;padding:10px;background:rgba(11,19,36,.82);color:#C5D0E3;font-size:15px;transition:opacity .3s;z-index:5}
+#bar button{background:#16274A;color:#F5F6F2;border:1px solid #2A3D63;border-radius:8px;padding:8px 18px;font-size:15px;cursor:pointer;font-family:inherit}#bar button:hover{background:#2E6BD6}
+#bar button:disabled{opacity:.35;cursor:default}#num{min-width:90px;text-align:center}
+@media print{#bar{display:none!important}}</style></head><body>
+<div id="stage">
+<section class="slide" id="g1-kapak" data-transition="fade" style="background:#0E1B33;color:#F5F6F2;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;justify-content:space-between">
+<div style="position:absolute;left:0;top:0;width:24px;height:1080px;background:#F0A33A"></div>
+<p style="font-size:24px;letter-spacing:4px;text-transform:uppercase;color:#F0A33A;font-weight:600">Türkiye Bankalar Birliği · Online Eğitim · 3–5 Kasım 2026</p>
+<div style="display:flex;flex-direction:column;gap:32px">
+<h1 style="font-size:120px;font-weight:700;line-height:1.05;letter-spacing:-2px;color:#F5F6F2">GitHub Copilot ile<br>Yazılım Geliştirme</h1>
+<p style="font-size:44px;color:#C5D0E3;line-height:1.3">Gün 1 · Temeller, kurumsal özelleştirme ve spec-odaklı geliştirme</p>
+</div>
+<div style="display:flex;justify-content:space-between;align-items:end">
+<p style="font-size:32px;color:#F5F6F2;font-weight:600">Dr. Ertürk Erdağı</p>
+<p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:24px;color:#8FA0BD">github.com/erturkerdagi/tbb-copilot-egitimi</p>
+</div>
+<p style="position:absolute;right:96px;bottom:64px;font-size:24px;font-weight:600;letter-spacing:1px;color:#8FA0BD">1 / 45</p>
+
+</section>
+<section class="slide" id="g1-egitmen" style="background:#F5F6F2;color:#3E4A5E;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:56px">
+<div style="display:flex;flex-direction:column;gap:16px">
+<p style="font-size:24px;letter-spacing:3px;text-transform:uppercase;color:#2E6BD6;font-weight:600">Eğitmen</p>
+<h2 style="font-size:72px;font-weight:700;color:#14213D;line-height:1.1">Dr. Ertürk Erdağı</h2>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:32px">
+<div style="display:flex;flex-direction:column;gap:24px;background:#FCFCFA;border:1px solid #DDE3EA;border-radius:16px;padding:40px">
+<h3 style="font-size:32px;font-weight:600;color:#14213D">Akademik</h3>
+<p style="font-size:28px;line-height:1.4"><b>Lisans:</b> Marmara Üniversitesi, Bilgisayar ve Öğretim Teknolojileri (2009)</p>
+<p style="font-size:28px;line-height:1.4"><b>Yüksek lisans:</b> İTÜ, Bilgi Güvenliği Mühendisliği ve Kriptografi (2018)</p>
+<p style="font-size:28px;line-height:1.4"><b>Doktora:</b> Maltepe Üniversitesi, Bilgisayar Mühendisliği (2023)</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:24px;background:#FCFCFA;border:1px solid #DDE3EA;border-radius:16px;padding:40px">
+<h3 style="font-size:32px;font-weight:600;color:#14213D">Bugün</h3>
+<p style="font-size:28px;line-height:1.4">2025'ten beri İstanbul Medeniyet Üniversitesi Bilgisayar Mühendisliği</p>
+<p style="font-size:28px;line-height:1.4">2010–2025: MEB'de şube müdürlüğü ve Ar-Ge yöneticiliği</p>
+<p style="font-size:28px;line-height:1.4"><b>Çalışma alanları:</b> Yapay zekâ, makine öğrenmesi, doğal dil işleme; kurumsal yazılım ve YZ eğitimleri</p>
+</div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1400px;font-size:24px;color:#6B7587">Gün 1 · Açılış</p>
+<p style="position:absolute;right:96px;bottom:64px;font-size:24px;font-weight:600;letter-spacing:1px;color:#6B7587">2 / 45</p>
+
+</section>
+<section class="slide" id="g1-harita" style="background:#F5F6F2;color:#3E4A5E;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px">
+<div style="display:flex;flex-direction:column;gap:16px">
+<p style="font-size:24px;letter-spacing:3px;text-transform:uppercase;color:#2E6BD6;font-weight:600">Üç günün haritası</p>
+<h2 style="font-size:72px;font-weight:700;color:#14213D;line-height:1.1">Copilot'u SDLC'nin her aşamasına yayıyoruz</h2>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:32px;flex:1">
+<div style="display:flex;flex-direction:column;gap:20px;background:#0E1B33;border-radius:16px;padding:40px">
+<p style="font-size:24px;letter-spacing:3px;text-transform:uppercase;color:#F0A33A;font-weight:600">Gün 1 · Bugün</p>
+<h3 style="font-size:40px;font-weight:600;color:#F5F6F2;line-height:1.2">“Copilot geldi”</h3>
+<p style="font-size:28px;color:#C5D0E3">M1 · Giriş ve çıktı doğrulama</p>
+<p style="font-size:28px;color:#C5D0E3">M2 · Prompt ve kurumsal özelleştirme</p>
+<p style="font-size:28px;color:#C5D0E3">M3 · Spec-odaklı geliştirme</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:20px;background:#FCFCFA;border:1px solid #DDE3EA;border-radius:16px;padding:40px">
+<p style="font-size:24px;letter-spacing:3px;text-transform:uppercase;color:#2E6BD6;font-weight:600">Gün 2</p>
+<h3 style="font-size:40px;font-weight:600;color:#14213D;line-height:1.2">“Hız güzel, ama doğru mu?”</h3>
+<p style="font-size:28px">M4 · YZ ile test odaklı geliştirme</p>
+<p style="font-size:28px">M5 · Legacy modernizasyonu</p>
+<p style="font-size:28px">M6 · Kod inceleme ve güvenlik</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:20px;background:#FCFCFA;border:1px solid #DDE3EA;border-radius:16px;padding:40px">
+<p style="font-size:24px;letter-spacing:3px;text-transform:uppercase;color:#2E6BD6;font-weight:600">Gün 3</p>
+<h3 style="font-size:40px;font-weight:600;color:#14213D;line-height:1.2">“Pilottan kuruma”</h3>
+<p style="font-size:28px">M7 · DevOps otomasyonu</p>
+<p style="font-size:28px">M8 · Yönetişim ve yaygınlaştırma</p>
+<p style="font-size:28px">M9 · Atölye: uçtan uca</p>
+</div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1400px;font-size:24px;color:#6B7587">Gün 1 · Açılış</p>
+<p style="position:absolute;right:96px;bottom:64px;font-size:24px;font-weight:600;letter-spacing:1px;color:#6B7587">3 / 45</p>
+
+</section>
+<section class="slide" id="g1-senaryo" style="background:#F5F6F2;color:#3E4A5E;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px">
+<div style="display:flex;flex-direction:column;gap:16px">
+<p style="font-size:24px;letter-spacing:3px;text-transform:uppercase;color:#2E6BD6;font-weight:600">Banka senaryomuz · Erdağı Bank</p>
+<h2 style="font-size:72px;font-weight:700;color:#14213D;line-height:1.1">Dijital Bankacılık ekibi iki sistemle yaşıyor</h2>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:32px">
+<div style="display:flex;flex-direction:column;gap:20px;background:#FCFCFA;border:1px solid #DDE3EA;border-top:8px solid #2E6BD6;border-radius:16px;padding:40px">
+<p style="font-size:24px;letter-spacing:3px;text-transform:uppercase;color:#2E6BD6;font-weight:600">Yeni · src/Bank.Api</p>
+<h3 style="font-size:40px;font-weight:600;color:#14213D">Hesap API'si</h3>
+<p style="font-size:28px;line-height:1.4">Mobil uygulamanın arka ucu: hesap sorgulama, işlem geçmişi, transfer</p>
+<p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:24px;color:#14213D">.NET 10 · Minimal API · EF Core · SQLite</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:20px;background:#FCFCFA;border:1px solid #DDE3EA;border-top:8px solid #F0A33A;border-radius:16px;padding:40px">
+<p style="font-size:24px;letter-spacing:3px;text-transform:uppercase;color:#9A5B00;font-weight:600">2014 · legacy/</p>
+<h3 style="font-size:40px;font-weight:600;color:#14213D">EB.Legacy.Transfer</h3>
+<p style="font-size:28px;line-height:1.4">EFT ücretlerini hesaplıyor, şubelere hizmet veriyor. Belgesi yok, yazan ayrılmış.</p>
+<p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:24px;color:#14213D">.NET Framework 4.8 · eski tip proje</p>
+</div>
+</div>
+<div style="display:flex;align-items:center;gap:24px;background:#E9EDF2;border-radius:16px;padding:28px 40px">
+<span style="display:inline-block;color:#14213D;width:48px;height:48px"><svg viewBox="0 0 24 24" width="100%" height="100%" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.9M16 3.1a4 4 0 0 1 0 7.8"/></svg></span>
+<p style="font-size:30px;color:#14213D;line-height:1.35"><b>Kahramanlar sizsiniz:</b> Copilot pilotunu yürüten geliştirici ekibi.</p>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1400px;font-size:24px;color:#6B7587">Gün 1 · Açılış</p>
+<p style="position:absolute;right:96px;bottom:64px;font-size:24px;font-weight:600;letter-spacing:1px;color:#6B7587">4 / 45</p>
+
+</section>
+<section class="slide" id="g1-yolculuk" style="background:#F5F6F2;color:#3E4A5E;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:40px">
+<div style="display:flex;flex-direction:column;gap:16px">
+<p style="font-size:24px;letter-spacing:3px;text-transform:uppercase;color:#2E6BD6;font-weight:600">Banka senaryomuzda üç gün</p>
+<h2 style="font-size:72px;font-weight:700;color:#14213D;line-height:1.1">Ne yapacağız, sonunda elimizde ne olacak?</h2>
+</div>
+<div style="display:flex;flex-direction:column;border:1px solid #DDE3EA;border-radius:12px"><div style="display:grid;grid-template-columns:0.55fr 2.2fr 1.6fr;gap:24px;padding:16px 28px;background:#0E1B33;border-radius:12px 12px 0 0"><p style="font-size:24px;line-height:1.35;color:#F0A33A;font-weight:600;letter-spacing:1px;text-transform:uppercase">Gün</p><p style="font-size:24px;line-height:1.35;color:#F0A33A;font-weight:600;letter-spacing:1px;text-transform:uppercase">Banka senaryomuzda yapacağımız iş</p><p style="font-size:24px;line-height:1.35;color:#F0A33A;font-weight:600;letter-spacing:1px;text-transform:uppercase">Gün sonunda elimizde</p></div><div style="display:grid;grid-template-columns:0.55fr 2.2fr 1.6fr;gap:24px;padding:18px 28px;border-bottom:1px solid #DDE3EA;background:#FCFCFA"><p style="font-size:25px;line-height:1.35;font-weight:700;color:#14213D">Gün 1</p><p style="font-size:25px;line-height:1.35;">Copilot'u tanıyoruz · bankanın kodlama kurallarını Copilot'a öğretiyoruz · iş biriminin "kendi hesaplarım arasında para aktarayım" talebini spec ile geliştiriyoruz</p><p style="font-size:25px;line-height:1.35;">.github klasöründe talimat, prompt, skill ve ajan dosyaları · test edilmiş virman özelliği</p></div><div style="display:grid;grid-template-columns:0.55fr 2.2fr 1.6fr;gap:24px;padding:18px 28px;border-bottom:1px solid #DDE3EA;background:#FCFCFA"><p style="font-size:25px;line-height:1.35;font-weight:700;color:#14213D">Gün 2</p><p style="font-size:25px;line-height:1.35;">Müşteri şikâyeti olan limit hatasını test odaklı düzeltiyoruz · 2014'ten kalma EFT sistemini .NET 10'a taşıyoruz · dış ekipten gelen PR'ı güvenlik incelemesinden geçiriyoruz</p><p style="font-size:25px;line-height:1.35;">Düzeltilmiş limit kuralı · modernize edilmiş EFT sistemi · güvenlik bulguları</p></div><div style="display:grid;grid-template-columns:0.55fr 2.2fr 1.6fr;gap:24px;padding:18px 28px;border-bottom:1px solid #DDE3EA;background:#FCFCFA"><p style="font-size:25px;line-height:1.35;font-weight:700;color:#14213D">Gün 3</p><p style="font-size:25px;line-height:1.35;">CI hattı ve Dockerfile yazdırıyoruz · kırık pipeline'ı teşhis ediyoruz · yönetişim kararlarını veriyoruz · atölyede "düzenli ödeme talimatı"nı uçtan uca geliştiriyoruz</p><p style="font-size:25px;line-height:1.35;">CI/CD · politika ve ölçüm planı · issue'dan birleştirmeye yeni özellik</p></div></div>
+
+<p style="position:absolute;left:128px;bottom:64px;width:1400px;font-size:24px;color:#6B7587">Gün 1 · Açılış</p>
+<p style="position:absolute;right:96px;bottom:64px;font-size:24px;font-weight:600;letter-spacing:1px;color:#6B7587">5 / 45</p>
+
+</section>
+<section class="slide" id="g1-depo" style="background:#F5F6F2;color:#3E4A5E;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px">
+<div style="display:flex;flex-direction:column;gap:16px">
+<p style="font-size:24px;letter-spacing:3px;text-transform:uppercase;color:#2E6BD6;font-weight:600">Neredeyiz? Depo hep söyler</p>
+<h2 style="font-size:72px;font-weight:700;color:#14213D;line-height:1.1">Her modülün bitmiş hali bir yedek branch'te</h2>
+</div>
+<div style="display:flex;align-items:stretch;gap:10px"><div style="flex:1;display:flex;flex-direction:column;gap:12px;background:#FCFCFA;border:1px solid #DDE3EA;border-radius:14px;padding:28px 18px"><p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:24px;color:#2E6BD6">main</p><p style="font-size:28px;color:#14213D;font-weight:700;line-height:1.2">Başlangıç</p><p style="font-size:24px;line-height:1.35;color:#6B7587">Hesap API + 2014 EFT sistemi</p></div><div style="display:flex;align-items:center"><span style="display:inline-block;width:32px;height:18px"><svg viewBox="0 0 32 18" width="100%" height="100%" preserveAspectRatio="none"><path d="M0 6h20V0l12 9-12 9v-6H0z" fill="#9AA6B8"/></svg></span></div><div style="flex:1;display:flex;flex-direction:column;gap:12px;background:#2E6BD6;border-radius:14px;padding:28px 18px"><p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:24px;color:#FFE2B5">yedek/d1-m3-son</p><p style="font-size:28px;color:#F5F6F2;font-weight:700;line-height:1.2">Gün 1 sonu</p><p style="font-size:24px;line-height:1.35;color:#E1EAFB">Talimat dosyaları + virman</p></div><div style="display:flex;align-items:center"><span style="display:inline-block;width:32px;height:18px"><svg viewBox="0 0 32 18" width="100%" height="100%" preserveAspectRatio="none"><path d="M0 6h20V0l12 9-12 9v-6H0z" fill="#9AA6B8"/></svg></span></div><div style="flex:1;display:flex;flex-direction:column;gap:12px;background:#2E6BD6;border-radius:14px;padding:28px 18px"><p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:24px;color:#FFE2B5">yedek/d2-m5-son</p><p style="font-size:28px;color:#F5F6F2;font-weight:700;line-height:1.2">Gün 2 sonu</p><p style="font-size:24px;line-height:1.35;color:#E1EAFB">Limit düzeltmesi + .NET 10 EFT</p></div><div style="display:flex;align-items:center"><span style="display:inline-block;width:32px;height:18px"><svg viewBox="0 0 32 18" width="100%" height="100%" preserveAspectRatio="none"><path d="M0 6h20V0l12 9-12 9v-6H0z" fill="#9AA6B8"/></svg></span></div><div style="flex:1;display:flex;flex-direction:column;gap:12px;background:#0E1B33;border-radius:14px;padding:28px 18px"><p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:24px;color:#F0A33A">final</p><p style="font-size:28px;color:#F5F6F2;font-weight:700;line-height:1.2">Gün 3 sonu</p><p style="font-size:24px;line-height:1.35;color:#8FA0BD">CI/CD + düzenli ödeme talimatı</p></div></div>
+<div style="display:grid;grid-template-columns:repeat(3, 1fr);gap:28px"><div style="display:flex;flex-direction:column;gap:14px;background:#FCFCFA;border:1px solid #DDE3EA;border-radius:16px;padding:32px">
+<span style="display:inline-block;color:#2E6BD6;width:56px;height:56px;flex-shrink:0"><svg viewBox="0 0 24 24" width="100%" height="100%" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V2H6.5A2.5 2.5 0 0 0 4 4.5v15z"/><path d="M6.5 17A2.5 2.5 0 0 0 4 19.5 2.5 2.5 0 0 0 6.5 22H20v-5"/></svg></span>
+<p style="font-size:30px;font-weight:700;color:#14213D;line-height:1.2">README</p>
+<p style="font-size:26px;line-height:1.4;">Senaryo, gün gün yol haritası, dosya haritası</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:14px;background:#FCFCFA;border:1px solid #DDE3EA;border-radius:16px;padding:32px">
+<span style="display:inline-block;color:#2E6BD6;width:56px;height:56px;flex-shrink:0"><svg viewBox="0 0 24 24" width="100%" height="100%" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m16 18 6-6-6-6M8 6l-6 6 6 6"/></svg></span>
+<p style="font-size:30px;font-weight:700;color:#14213D;line-height:1.2">docs/PROMPTLAR-GUN*.md</p>
+<p style="font-size:26px;line-height:1.4;">Bütün prompt'lar ve terminal komutları, sırasıyla</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:14px;background:#0E1B33;border-radius:16px;padding:32px">
+<span style="display:inline-block;color:#F0A33A;width:56px;height:56px;flex-shrink:0"><svg viewBox="0 0 24 24" width="100%" height="100%" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10 12 5 2 10l10 5 10-5z"/><path d="M6 12v5c3 2 9 2 12 0v-5"/></svg></span>
+<p style="font-size:30px;font-weight:700;color:#F0A33A;line-height:1.2">rehber/</p>
+<p style="font-size:26px;line-height:1.4;color:#C5D0E3;">Kurulum ve demoları kendi başınıza yapma rehberi</p>
+</div></div>
+
+<p style="position:absolute;left:128px;bottom:64px;width:1400px;font-size:24px;color:#6B7587">github.com/erturkerdagi/tbb-copilot-egitimi</p>
+<p style="position:absolute;right:96px;bottom:64px;font-size:24px;font-weight:600;letter-spacing:1px;color:#6B7587">6 / 45</p>
+
+</section>
+<section class="slide" id="g1-isleyis" style="background:#F5F6F2;color:#3E4A5E;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px">
+<div style="display:flex;flex-direction:column;gap:16px">
+<p style="font-size:24px;letter-spacing:3px;text-transform:uppercase;color:#2E6BD6;font-weight:600">Nasıl çalışacağız</p>
+<h2 style="font-size:72px;font-weight:700;color:#14213D;line-height:1.1">Az slayt, çok canlı kod</h2>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:32px">
+<div style="display:flex;flex-direction:column;gap:16px;background:#FCFCFA;border:1px solid #DDE3EA;border-radius:16px;padding:40px">
+<span style="display:inline-block;color:#2E6BD6;width:56px;height:56px"><svg viewBox="0 0 24 24" width="100%" height="100%" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="6 3 20 12 6 21 6 3"/></svg></span>
+<h3 style="font-size:36px;font-weight:600;color:#14213D">Her modül aynı ritim</h3>
+<p style="font-size:28px;line-height:1.4">Kavram → canlı demo → “Kurumunuzda bu ne demek?” → soru-cevap</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:16px;background:#FCFCFA;border:1px solid #DDE3EA;border-radius:16px;padding:40px">
+<span style="display:inline-block;color:#2E6BD6;width:56px;height:56px"><svg viewBox="0 0 24 24" width="100%" height="100%" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.9M16 3.1a4 4 0 0 1 0 7.8"/></svg></span>
+<h3 style="font-size:36px;font-weight:600;color:#14213D">İzleyin ya da uygulayın</h3>
+<p style="font-size:28px;line-height:1.4">Ben canlı yapıyorum. İsteyen aynı depoda kendi makinesinde takip ediyor.</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:16px;background:#FCFCFA;border:1px solid #DDE3EA;border-radius:16px;padding:40px">
+<span style="display:inline-block;color:#2E6BD6;width:56px;height:56px"><svg viewBox="0 0 24 24" width="100%" height="100%" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7"/><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/></svg></span>
+<h3 style="font-size:36px;font-weight:600;color:#14213D">Geride kalan yetişir</h3>
+<p style="font-size:28px;line-height:1.4">Her modülün bitmiş hali bir <b>yedek branch</b>'te. Prompt'lar <b>docs/</b> klasöründe.</p>
+</div>
+</div>
+<div style="display:flex;align-items:center;gap:24px;background:#0E1B33;border-radius:16px;padding:32px 40px">
+<p style="font-size:24px;letter-spacing:3px;text-transform:uppercase;color:#F0A33A;font-weight:600">Depo</p>
+<p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:32px;color:#F5F6F2">github.com/erturkerdagi/tbb-copilot-egitimi</p>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1400px;font-size:24px;color:#6B7587">Gün 1 · Açılış</p>
+<p style="position:absolute;right:96px;bottom:64px;font-size:24px;font-weight:600;letter-spacing:1px;color:#6B7587">7 / 45</p>
+
+</section>
+<section class="slide" id="g1-demo-acilis" style="background:#0E1B33;color:#C5D0E3;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:36px">
+<div style="display:flex;align-items:center;gap:24px">
+<p style="font-size:24px;letter-spacing:3px;text-transform:uppercase;font-weight:700;color:#14213D;background:#F0A33A;padding:10px 24px;border-radius:999px">Canlı demo</p>
+<p style="font-size:28px;color:#8FA0BD">Açılış</p>
+</div>
+<h2 style="font-size:68px;font-weight:700;color:#F5F6F2;line-height:1.1">Depoyu sıfırdan aç, bankayı çalışırken gör</h2>
+<div style="display:grid;grid-template-columns:5fr 6fr;gap:48px">
+<div style="display:flex;flex-direction:column;gap:20px">
+<div style="display:flex;flex-direction:column;gap:6px"><h3 style="font-size:30px;font-weight:600;color:#F0A33A">1 · VS Code ve depo</h3><p style="font-size:26px;line-height:1.4">Klasörü aç, güven sorusuna cevap ver</p></div>
+<div style="display:flex;flex-direction:column;gap:6px"><h3 style="font-size:30px;font-weight:600;color:#F0A33A">2 · Ekranı tanı</h3><p style="font-size:26px;line-height:1.4">Explorer, Chat paneli, oturum hedefi: Local</p></div>
+<div style="display:flex;flex-direction:column;gap:6px"><h3 style="font-size:30px;font-weight:600;color:#F0A33A">3 · Çalıştır</h3><p style="font-size:26px;line-height:1.4">dotnet run · .http dosyasından HTTP isteği</p></div>
+<div style="display:flex;flex-direction:column;gap:6px"><h3 style="font-size:30px;font-weight:600;color:#F0A33A">4 · Veriye bak</h3><p style="font-size:26px;line-height:1.4">SQLite dosyası: bakiye ve transfer</p></div>
+</div>
+<div style="display:flex;flex-direction:column;gap:16px">
+<div style="background:#0A1428;border:1px solid #2A3D63;border-radius:16px;padding:26px;display:flex;flex-direction:column;gap:8px"><p style="font-size:24px;letter-spacing:3px;text-transform:uppercase;color:#8FA0BD;font-weight:600">Terminal</p><p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:26px;line-height:1.5;color:#F5F6F2">dotnet run --project src/Bank.Api</p></div>
+<div style="background:#0A1428;border:1px solid #2A3D63;border-radius:16px;padding:26px;display:flex;flex-direction:column;gap:8px"><p style="font-size:24px;letter-spacing:3px;text-transform:uppercase;color:#8FA0BD;font-weight:600">Bank.Api.http</p><p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:24px;line-height:1.5;color:#F5F6F2">### Ayşe'nin vadesiz hesabı (Id = 1)<br>GET {{baseUrl}}/accounts/1</p></div>
+</div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1400px;font-size:24px;color:#8FA0BD">Başlangıç: main · docs/PROMPTLAR-GUN1.md</p>
+<p style="position:absolute;right:96px;bottom:64px;font-size:24px;font-weight:600;letter-spacing:1px;color:#8FA0BD">8 / 45</p>
+
+</section>
+<section class="slide" id="g1-pilot" data-transition="fade" style="background:#F0A33A;color:#14213D;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;justify-content:center;gap:48px">
+<p style="font-size:28px;letter-spacing:4px;text-transform:uppercase;font-weight:600;color:#14213D">Pilotun sonunda yönetim kuruluna gidecek soru</p>
+<h1 style="font-size:104px;font-weight:700;line-height:1.1;letter-spacing:-1px;color:#14213D">“Copilot'u bütün bankaya yayalım mı?”</h1>
+<p style="font-size:40px;line-height:1.35;color:#14213D">Hızı ölçeceğiz. Ama kaliteden, güvenlikten ve denetimden ödün vermeden.</p>
+<p style="position:absolute;right:96px;bottom:64px;font-size:24px;font-weight:600;letter-spacing:1px;color:#14213D">9 / 45</p>
+
+</section>
+<section class="slide" id="m1-bolum" data-transition="fade" style="background:#0E1B33;color:#F5F6F2;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;justify-content:center;gap:32px">
+<p style="font-size:200px;font-weight:700;line-height:1;color:#F0A33A">01</p>
+<p style="font-size:28px;letter-spacing:4px;text-transform:uppercase;color:#8FA0BD;font-weight:600">Modül 1</p>
+<h1 style="font-size:96px;font-weight:700;line-height:1.1;color:#F5F6F2">Copilot nasıl çalışır?</h1>
+<p style="font-size:40px;color:#C5D0E3">Giriş, çalışma prensipleri ve çıktı doğrulama</p>
+<p style="position:absolute;right:96px;bottom:64px;font-size:24px;font-weight:600;letter-spacing:1px;color:#8FA0BD">10 / 45</p>
+
+</section>
+<section class="slide" id="m1-durum" style="background:#F5F6F2;color:#3E4A5E;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px">
+<div style="display:flex;flex-direction:column;gap:16px">
+<p style="font-size:24px;letter-spacing:3px;text-transform:uppercase;color:#2E6BD6;font-weight:600">Bankada yaşanan durum</p>
+<h2 style="font-size:72px;font-weight:700;color:#14213D;line-height:1.1">Lisanslar dağıtıldı. İlk hafta iki yorum geldi.</h2>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:32px">
+<div style="display:flex;flex-direction:column;gap:20px;background:#FCFCFA;border:1px solid #DDE3EA;border-radius:16px;padding:40px">
+<span style="display:inline-block;color:#2E6BD6;width:56px;height:56px"><svg viewBox="0 0 24 24" width="100%" height="100%" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 10v12M15 5.9 14 10h5.8a2 2 0 0 1 1.9 2.6l-2.3 8A2 2 0 0 1 17.5 22H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2.8a2 2 0 0 0 1.8-1.1L12 2a3.1 3.1 0 0 1 3 3.9z"/></svg></span>
+<p style="font-size:40px;line-height:1.3;color:#14213D">“İnanılmaz. Yeni endpoint'i otuz saniyede yazdı.”</p>
+<p style="font-size:26px;color:#6B7587">Geliştirici, Dijital Bankacılık</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:20px;background:#FCFCFA;border:1px solid #DDE3EA;border-radius:16px;padding:40px">
+<span style="display:inline-block;color:#9A5B00;width:56px;height:56px"><svg viewBox="0 0 24 24" width="100%" height="100%" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.7 18-8-14a2 2 0 0 0-3.5 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.7-3z"/><path d="M12 9v4M12 17h.01"/></svg></span>
+<p style="font-size:40px;line-height:1.3;color:#14213D">“Saçma. Var olmayan bir paket önerdi.”</p>
+<p style="font-size:26px;color:#6B7587">Geliştirici, aynı ekip</p>
+</div>
+</div>
+<p style="font-size:40px;font-weight:600;color:#14213D">Kim haklı? İkisi de. Nedenini mekanizmada arayacağız.</p>
+<p style="position:absolute;left:128px;bottom:64px;width:1400px;font-size:24px;color:#6B7587">Gün 1 · Modül 1 — Giriş</p>
+<p style="position:absolute;right:96px;bottom:64px;font-size:24px;font-weight:600;letter-spacing:1px;color:#6B7587">11 / 45</p>
+
+</section>
+<section class="slide" id="m1-token" style="background:#F5F6F2;color:#3E4A5E;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px">
+<div style="display:flex;flex-direction:column;gap:16px">
+<p style="font-size:24px;letter-spacing:3px;text-transform:uppercase;color:#2E6BD6;font-weight:600">Temel mekanizma</p>
+<h2 style="font-size:72px;font-weight:700;color:#14213D;line-height:1.1">Model bir sonraki parçayı tahmin eder</h2>
+</div>
+<div style="display:grid;grid-template-columns:1.2fr 1fr;gap:48px">
+<div style="display:flex;flex-direction:column;gap:24px;background:#0E1B33;border-radius:16px;padding:40px">
+<p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:32px;color:#F5F6F2">// Para tutarları her zaman <span style="color:#F0A33A">___</span></p>
+<div style="display:flex;align-items:center;gap:20px"><p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:28px;color:#F5F6F2;width:140px">decimal</p><div style="height:36px;width:400px;background:#F0A33A;border-radius:6px"></div><p style="font-size:26px;color:#C5D0E3">en olası</p></div>
+<div style="display:flex;align-items:center;gap:20px"><p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:28px;color:#F5F6F2;width:140px">double</p><div style="height:36px;width:150px;background:#5A7BB5;border-radius:6px"></div></div>
+<div style="display:flex;align-items:center;gap:20px"><p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:28px;color:#F5F6F2;width:140px">int</p><div style="height:36px;width:70px;background:#5A7BB5;border-radius:6px"></div></div>
+<div style="display:flex;align-items:center;gap:20px"><p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:28px;color:#F5F6F2;width:140px">string</p><div style="height:36px;width:36px;background:#5A7BB5;border-radius:6px"></div></div>
+<p style="font-size:24px;color:#8FA0BD">Temsilî örnek; çubuklar olasılık dağılımını gösterir.</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:28px">
+<div style="display:flex;flex-direction:column;gap:8px"><h3 style="font-size:32px;font-weight:600;color:#14213D">Token</h3><p style="font-size:28px;line-height:1.4">Kelime değil, kelime parçası. Türkçe ve kod daha çok token tüketir.</p></div>
+<div style="display:flex;flex-direction:column;gap:8px"><h3 style="font-size:32px;font-weight:600;color:#14213D">Olasılık</h3><p style="font-size:28px;line-height:1.4">Her adımda bir dağılımdan seçer. Aynı soru, farklı cevap.</p></div>
+<div style="display:flex;flex-direction:column;gap:8px"><h3 style="font-size:32px;font-weight:600;color:#14213D">Bilgi kesim tarihi</h3><p style="font-size:28px;line-height:1.4">Eğitildiği tarihten sonrasını bilmez: eski sürüm sözdizimi buradan gelir.</p></div>
+</div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1400px;font-size:24px;color:#6B7587">Gün 1 · Modül 1 — Giriş</p>
+<p style="position:absolute;right:96px;bottom:64px;font-size:24px;font-weight:600;letter-spacing:1px;color:#6B7587">12 / 45</p>
+
+</section>
+<section class="slide" id="m1-baglam" style="background:#F5F6F2;color:#3E4A5E;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px">
+<div style="display:flex;flex-direction:column;gap:16px">
+<p style="font-size:24px;letter-spacing:3px;text-transform:uppercase;color:#2E6BD6;font-weight:600">Bağlam penceresi</p>
+<h2 style="font-size:72px;font-weight:700;color:#14213D;line-height:1.1">Model yalnızca bağlamdakini bilir</h2>
+</div>
+<div style="display:flex;align-items:center;gap:40px">
+<div style="display:flex;flex-direction:column;gap:20px;background:#FCFCFA;border:1px solid #DDE3EA;border-radius:16px;padding:40px;width:640px">
+<h3 style="font-size:32px;font-weight:600;color:#14213D">Projeniz</h3>
+<svg aria-label="Kırk dosyalık bir proje; altısı vurgulu" width="560" height="270" viewBox="0 0 560 270"><g fill="#DDE3EA"><rect x="0" y="0" width="56" height="42" rx="6"/><rect x="72" y="0" width="56" height="42" rx="6"/><rect x="216" y="0" width="56" height="42" rx="6"/><rect x="288" y="0" width="56" height="42" rx="6"/><rect x="432" y="0" width="56" height="42" rx="6"/><rect x="504" y="0" width="56" height="42" rx="6"/><rect x="0" y="57" width="56" height="42" rx="6"/><rect x="144" y="57" width="56" height="42" rx="6"/><rect x="216" y="57" width="56" height="42" rx="6"/><rect x="360" y="57" width="56" height="42" rx="6"/><rect x="432" y="57" width="56" height="42" rx="6"/><rect x="504" y="57" width="56" height="42" rx="6"/><rect x="0" y="114" width="56" height="42" rx="6"/><rect x="72" y="114" width="56" height="42" rx="6"/><rect x="144" y="114" width="56" height="42" rx="6"/><rect x="288" y="114" width="56" height="42" rx="6"/><rect x="360" y="114" width="56" height="42" rx="6"/><rect x="504" y="114" width="56" height="42" rx="6"/><rect x="72" y="171" width="56" height="42" rx="6"/><rect x="144" y="171" width="56" height="42" rx="6"/><rect x="216" y="171" width="56" height="42" rx="6"/><rect x="288" y="171" width="56" height="42" rx="6"/><rect x="432" y="171" width="56" height="42" rx="6"/><rect x="504" y="171" width="56" height="42" rx="6"/><rect x="0" y="228" width="56" height="42" rx="6"/><rect x="72" y="228" width="56" height="42" rx="6"/><rect x="216" y="228" width="56" height="42" rx="6"/><rect x="288" y="228" width="56" height="42" rx="6"/><rect x="360" y="228" width="56" height="42" rx="6"/><rect x="432" y="228" width="56" height="42" rx="6"/><rect x="0" y="171" width="56" height="42" rx="6"/><rect x="144" y="0" width="56" height="42" rx="6"/></g><g fill="#F0A33A"><rect x="360" y="0" width="56" height="42" rx="6"/><rect x="72" y="57" width="56" height="42" rx="6"/><rect x="288" y="57" width="56" height="42" rx="6"/><rect x="216" y="114" width="56" height="42" rx="6"/><rect x="432" y="114" width="56" height="42" rx="6"/><rect x="360" y="171" width="56" height="42" rx="6"/></g></svg>
+<p style="font-size:26px;color:#6B7587">Yüzlerce dosya. Copilot yalnızca vurgulananları görür.</p>
+</div>
+<span style="display:inline-block;width:120px;height:64px"><svg viewBox="0 0 32 18" width="100%" height="100%" preserveAspectRatio="none"><path d="M0 6h20V0l12 9-12 9v-6H0z" fill="#F0A33A"/></svg></span>
+<div style="flex:1;display:flex;flex-direction:column;gap:16px;background:#0E1B33;border-radius:16px;padding:40px">
+<h3 style="font-size:32px;font-weight:600;color:#F0A33A">Bu prompt'ta bağlama girenler</h3>
+<ul style="font-size:28px;line-height:1.5;color:#F5F6F2">
+<li>Açık dosya ve imleç çevresi</li>
+<li>Seçili kod, eklenen dosyalar (#file)</li>
+<li>Talimat dosyaları</li>
+<li>Sohbet geçmişi</li>
+<li>Araç çıktıları: build, test, terminal</li>
+</ul>
+</div>
+</div>
+<p style="font-size:32px;font-weight:600;color:#14213D">Pratik kural: konu değişince yeni sohbet açın.</p>
+<p style="position:absolute;left:128px;bottom:64px;width:1400px;font-size:24px;color:#6B7587">Gün 1 · Modül 1 — Giriş</p>
+<p style="position:absolute;right:96px;bottom:64px;font-size:24px;font-weight:600;letter-spacing:1px;color:#6B7587">13 / 45</p>
+
+</section>
+<section class="slide" id="m1-halusinasyon" style="background:#F5F6F2;color:#3E4A5E;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px">
+<div style="display:flex;flex-direction:column;gap:16px">
+<p style="font-size:24px;letter-spacing:3px;text-transform:uppercase;color:#2E6BD6;font-weight:600">Halüsinasyon</p>
+<h2 style="font-size:72px;font-weight:700;color:#14213D;line-height:1.1">Akla yatkın, kendinden emin ve yanlış</h2>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:28px">
+<div style="display:flex;flex-direction:column;gap:12px;background:#FCFCFA;border:1px solid #DDE3EA;border-radius:16px;padding:32px">
+<h3 style="font-size:30px;font-weight:600;color:#14213D">Olmayan API veya paket</h3>
+<p style="font-size:26px;line-height:1.4">Var olmayan bir NuGet paketini güvenle önermek</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:12px;background:#FCFCFA;border:1px solid #DDE3EA;border-radius:16px;padding:32px">
+<h3 style="font-size:30px;font-weight:600;color:#14213D">Sürüm karışıklığı</h3>
+<p style="font-size:26px;line-height:1.4">.NET Framework sözdizimini .NET 10 projesinde kullanmak</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:12px;background:#FCFCFA;border:1px solid #DDE3EA;border-radius:16px;padding:32px">
+<h3 style="font-size:30px;font-weight:600;color:#14213D">Sessiz mantık hatası</h3>
+<p style="font-size:26px;line-height:1.4">Derlenen, testi geçen ama iş kuralını yanlış uygulayan kod</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:12px;background:#FCFCFA;border:1px solid #DDE3EA;border-radius:16px;padding:32px">
+<h3 style="font-size:30px;font-weight:600;color:#14213D">Testi gevşetmek</h3>
+<p style="font-size:26px;line-height:1.4">Kırmızı testi düzeltmek yerine beklentisini değiştirmek</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:12px;background:#FCFCFA;border:1px solid #DDE3EA;border-radius:16px;padding:32px">
+<h3 style="font-size:30px;font-weight:600;color:#14213D">Uydurma güvenlik</h3>
+<p style="font-size:26px;line-height:1.4">“Güvenli” deyip parametresiz SQL bırakmak</p>
+</div>
+<div style="display:flex;flex-direction:column;justify-content:center;gap:12px;background:#0E1B33;border-radius:16px;padding:32px">
+<p style="font-size:30px;line-height:1.35;color:#F5F6F2;font-weight:600">Model “bilmiyorum” demek yerine en olası devamı üretir.</p>
+</div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1400px;font-size:24px;color:#6B7587">Gün 1 · Modül 1 — Giriş</p>
+<p style="position:absolute;right:96px;bottom:64px;font-size:24px;font-weight:600;letter-spacing:1px;color:#6B7587">14 / 45</p>
+
+</section>
+<section class="slide" id="m1-dongu" style="background:#F5F6F2;color:#3E4A5E;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:16px">
+<p style="font-size:24px;letter-spacing:3px;text-transform:uppercase;color:#2E6BD6;font-weight:600">Agent mode</p>
+<h2 style="font-size:72px;font-weight:700;color:#14213D;line-height:1.1">Ajan kendi işini doğrular</h2>
+
+
+
+
+
+
+
+<div style="position:absolute;left:128px;top:320px;width:300px;height:110px;background:#E9EDF2;border-radius:14px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:4px"><p style="font-size:32px;font-weight:600;color:#14213D">Hedef</p><p style="font-size:24px;color:#4A5568">sizin prompt'unuz</p></div>
+<div style="position:absolute;left:520px;top:320px;width:300px;height:110px;background:#FCFCFA;border:2px solid #14213D;border-radius:14px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:4px"><p style="font-size:32px;font-weight:600;color:#14213D">Plan</p><p style="font-size:24px;color:#4A5568">hangi dosyalar?</p></div>
+<div style="position:absolute;left:920px;top:320px;width:300px;height:110px;background:#FCFCFA;border:2px solid #14213D;border-radius:14px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:4px"><p style="font-size:32px;font-weight:600;color:#14213D">Araç çağrısı</p><p style="font-size:24px;color:#4A5568">okur, arar</p></div>
+<div style="position:absolute;left:1320px;top:320px;width:300px;height:110px;background:#FCFCFA;border:2px solid #14213D;border-radius:14px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:4px"><p style="font-size:32px;font-weight:600;color:#14213D">Değişiklik</p><p style="font-size:24px;color:#4A5568">dosyaları düzenler</p></div>
+<div style="position:absolute;left:1320px;top:600px;width:300px;height:110px;background:#0E1B33;border-radius:14px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:4px"><p style="font-size:32px;font-weight:600;color:#F0A33A">Doğrulama</p><p style="font-size:24px;color:#C5D0E3">dotnet build / test</p></div>
+<div style="position:absolute;left:920px;top:600px;width:300px;height:110px;background:#FCFCFA;border:2px solid #14213D;border-radius:14px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:4px"><p style="font-size:32px;font-weight:600;color:#14213D">Gözlem</p><p style="font-size:24px;color:#4A5568">hata çıktısını okur</p></div>
+<div style="position:absolute;left:1320px;top:790px;width:300px;height:100px;background:#2E6BD6;border-radius:14px;display:flex;flex-direction:column;justify-content:center;align-items:center"><p style="font-size:32px;font-weight:600;color:#F5F6F2">İnsan onayı</p></div>
+<p style="position:absolute;left:380px;top:520px;width:270px;font-size:26px;color:#9A5B00;font-weight:600">hata varsa tekrar</p>
+<p style="position:absolute;left:1490px;top:732px;width:280px;font-size:24px;color:#2E6BD6;font-weight:600">yeşilse</p>
+<p style="position:absolute;left:128px;top:760px;width:700px;font-size:30px;line-height:1.4;color:#14213D"><b>Testi olmayan projede</b> ajan kendini doğrulayamaz.</p>
+<p style="position:absolute;left:128px;bottom:64px;width:1400px;font-size:24px;color:#6B7587">Gün 1 · Modül 1 — Giriş</p>
+<p style="position:absolute;right:96px;bottom:64px;font-size:24px;font-weight:600;letter-spacing:1px;color:#6B7587">15 / 45</p>
+
+<svg style="position:absolute;left:0;top:0;width:1920px;height:1080px;pointer-events:none" viewBox="0 0 1920 1080"><defs><marker id="hm6ew00" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0L10 5L0 10z" fill="#6B7587"/></marker></defs><path d="M428 375L520 375" fill="none" stroke="#6B7587" stroke-width="3" marker-end="url(#hm6ew00)"/><defs><marker id="h39oe9u" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0L10 5L0 10z" fill="#6B7587"/></marker></defs><path d="M820 375L920 375" fill="none" stroke="#6B7587" stroke-width="3" marker-end="url(#h39oe9u)"/><defs><marker id="h25evv1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0L10 5L0 10z" fill="#6B7587"/></marker></defs><path d="M1220 375L1320 375" fill="none" stroke="#6B7587" stroke-width="3" marker-end="url(#h25evv1)"/><defs><marker id="h1wqp3j" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0L10 5L0 10z" fill="#6B7587"/></marker></defs><path d="M1470 430L1470 600" fill="none" stroke="#6B7587" stroke-width="3" marker-end="url(#h1wqp3j)"/><defs><marker id="hb4zr7c" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0L10 5L0 10z" fill="#6B7587"/></marker></defs><path d="M1320 655L1220 655" fill="none" stroke="#6B7587" stroke-width="3" marker-end="url(#hb4zr7c)"/><defs><marker id="hc7ywbx" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0L10 5L0 10z" fill="#9A5B00"/></marker></defs><path d="M920 655H670V430" fill="none" stroke="#9A5B00" stroke-width="3" marker-end="url(#hc7ywbx)"/><defs><marker id="hygnuwa" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0L10 5L0 10z" fill="#2E6BD6"/></marker></defs><path d="M1470 710L1470 790" fill="none" stroke="#2E6BD6" stroke-width="3" marker-end="url(#hygnuwa)"/></svg></section>
+<section class="slide" id="m1-yuzeyler" style="background:#F5F6F2;color:#3E4A5E;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px">
+<div style="display:flex;flex-direction:column;gap:16px">
+<p style="font-size:24px;letter-spacing:3px;text-transform:uppercase;color:#2E6BD6;font-weight:600">Ürün haritası</p>
+<h2 style="font-size:72px;font-weight:700;color:#14213D;line-height:1.1">Tek abonelik, üç çalışma alanı</h2>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:32px">
+<div style="display:flex;flex-direction:column;background:#FCFCFA;border:1px solid #DDE3EA;border-radius:16px;overflow:hidden">
+<div style="display:flex;align-items:center;gap:16px;background:#E9EDF2;padding:28px 36px"><span style="display:inline-block;color:#14213D;width:44px;height:44px"><svg viewBox="0 0 24 24" width="100%" height="100%" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m16 18 6-6-6-6M8 6l-6 6 6 6"/></svg></span><h3 style="font-size:34px;font-weight:600;color:#14213D">Editörde</h3></div>
+<div style="display:flex;flex-direction:column;gap:20px;padding:32px 36px">
+<p style="font-size:28px;line-height:1.35"><b>Tamamlama</b><br>yazarken gri öneri</p>
+<p style="font-size:28px;line-height:1.35"><b>Next Edit Suggestions</b><br>değişikliğin devamı</p>
+<p style="font-size:28px;line-height:1.35"><b>Inline chat</b><br>seçili kodda yerinde</p>
+</div>
+</div>
+<div style="display:flex;flex-direction:column;background:#FCFCFA;border:1px solid #DDE3EA;border-radius:16px;overflow:hidden">
+<div style="display:flex;align-items:center;gap:16px;background:#E9EDF2;padding:28px 36px"><span style="display:inline-block;color:#14213D;width:44px;height:44px"><svg viewBox="0 0 24 24" width="100%" height="100%" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span><h3 style="font-size:34px;font-weight:600;color:#14213D">Sohbette</h3></div>
+<div style="display:flex;flex-direction:column;gap:20px;padding:32px 36px">
+<p style="font-size:28px;line-height:1.35"><b>Ask · Plan · Agent</b><br>soru, plan, uygulama</p>
+<p style="font-size:28px;line-height:1.35"><b>Custom agent'lar</b><br>kurumun personaları</p>
+<p style="font-size:28px;line-height:1.35"><b>Copilot CLI</b><br>aynı ajan, terminalde</p>
+</div>
+</div>
+<div style="display:flex;flex-direction:column;background:#0E1B33;border-radius:16px;overflow:hidden">
+<div style="display:flex;align-items:center;gap:16px;background:#16284A;padding:28px 36px"><span style="display:inline-block;color:#F0A33A;width:44px;height:44px"><svg viewBox="0 0 24 24" width="100%" height="100%" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 19H9a7 7 0 1 1 6.7-9h1.8a4.5 4.5 0 1 1 0 9z"/></svg></span><h3 style="font-size:34px;font-weight:600;color:#F5F6F2">GitHub'da</h3></div>
+<div style="display:flex;flex-direction:column;gap:20px;padding:32px 36px">
+<p style="font-size:28px;line-height:1.35;color:#C5D0E3"><b style="color:#F5F6F2">Cloud agent</b><br>issue'dan PR'a, arka planda</p>
+<p style="font-size:28px;line-height:1.35;color:#C5D0E3"><b style="color:#F5F6F2">Code review</b><br>PR'da satır satır yorum</p>
+<p style="font-size:28px;line-height:1.35;color:#C5D0E3"><b style="color:#F5F6F2">Actions</b><br>ajan Actions üzerinde çalışır</p>
+</div>
+</div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1400px;font-size:24px;color:#6B7587">Gün 1 · Modül 1 — Giriş</p>
+<p style="position:absolute;right:96px;bottom:64px;font-size:24px;font-weight:600;letter-spacing:1px;color:#6B7587">16 / 45</p>
+
+</section>
+<section class="slide" id="m1-modlar" style="background:#F5F6F2;color:#3E4A5E;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px">
+<div style="display:flex;flex-direction:column;gap:16px">
+<p style="font-size:24px;letter-spacing:3px;text-transform:uppercase;color:#2E6BD6;font-weight:600">Sohbetin üç yerleşik ajanı</p>
+<h2 style="font-size:72px;font-weight:700;color:#14213D;line-height:1.1">Ask öğrenir, Plan düşünür, Agent yapar</h2>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:32px">
+<div style="display:flex;flex-direction:column;gap:16px;background:#FCFCFA;border:1px solid #DDE3EA;border-radius:16px;padding:40px">
+<p style="font-size:56px;font-weight:700;color:#14213D">Ask</p>
+<p style="font-size:28px;line-height:1.4">Soru, açıklama, öneri</p>
+<p style="font-size:26px;font-weight:600;color:#2E6BD6">Dosyaya dokunmaz</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:16px;background:#FCFCFA;border:1px solid #DDE3EA;border-radius:16px;padding:40px">
+<p style="font-size:56px;font-weight:700;color:#14213D">Plan</p>
+<p style="font-size:28px;line-height:1.4">Araştırır, netleştirici soru sorar, adım adım plan çıkarır</p>
+<p style="font-size:26px;font-weight:600;color:#2E6BD6">Dosyaya dokunmaz</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:16px;background:#0E1B33;border-radius:16px;padding:40px">
+<p style="font-size:56px;font-weight:700;color:#F0A33A">Agent</p>
+<p style="font-size:28px;line-height:1.4;color:#C5D0E3">Dosyaları düzenler, komut çalıştırır, hatalar üzerinden iterasyon yapar</p>
+<p style="font-size:26px;font-weight:600;color:#F0A33A">Onayla değiştirir</p>
+</div>
+</div>
+<div style="display:flex;align-items:center;gap:24px">
+<span style="display:inline-block;color:#9A5B00;width:48px;height:48px"><svg viewBox="0 0 24 24" width="100%" height="100%" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 22h4"/><path d="M15.1 14c.2-1 .7-1.7 1.5-2.5A6 6 0 1 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/></svg></span>
+<p style="font-size:34px;font-weight:600;color:#14213D">Alışkanlık: önce Plan, sonra “Start Implementation”.</p>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1400px;font-size:24px;color:#6B7587">Gün 1 · Modül 1 — Giriş</p>
+<p style="position:absolute;right:96px;bottom:64px;font-size:24px;font-weight:600;letter-spacing:1px;color:#6B7587">17 / 45</p>
+
+</section>
+<section class="slide" id="m1-demo-a" style="background:#0E1B33;color:#C5D0E3;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:36px">
+<div style="display:flex;align-items:center;gap:24px">
+<p style="font-size:24px;letter-spacing:3px;text-transform:uppercase;font-weight:700;color:#14213D;background:#F0A33A;padding:10px 24px;border-radius:999px">Canlı demo</p>
+<p style="font-size:28px;color:#8FA0BD">D1 · D2</p>
+</div>
+<h2 style="font-size:68px;font-weight:700;color:#F5F6F2;line-height:1.1">Editördeki üç öneri ve aynı prompt, üç mod</h2>
+<div style="display:grid;grid-template-columns:5fr 6fr;gap:48px">
+<div style="display:flex;flex-direction:column;gap:20px">
+<div style="display:flex;flex-direction:column;gap:6px"><h3 style="font-size:30px;font-weight:600;color:#F0A33A">D1 · Editörde</h3><p style="font-size:26px;line-height:1.4">Yorumdan metot, parametre adını değiştirince Next Edit Suggestions, seçili koda inline chat</p></div>
+<div style="display:flex;flex-direction:column;gap:6px"><h3 style="font-size:30px;font-weight:600;color:#F0A33A">D2 · Ask → Plan → Agent</h3><p style="font-size:26px;line-height:1.4">Aynı prompt üç modda: kim ne yaptı, hangi dosya değişti?</p></div>
+</div>
+<div style="display:flex;flex-direction:column;gap:16px">
+<div style="background:#0A1428;border:1px solid #2A3D63;border-radius:16px;padding:26px;display:flex;flex-direction:column;gap:8px"><p style="font-size:24px;letter-spacing:3px;text-transform:uppercase;color:#8FA0BD;font-weight:600">D2 prompt'u</p><p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:26px;line-height:1.5;color:#F5F6F2">Hesaptan para çekme (withdrawal) endpoint'i ekle: POST /accounts/{id}/withdrawals. Bakiye yetersizse hata dönsün.</p></div>
+</div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1400px;font-size:24px;color:#8FA0BD">Başlangıç: main · docs/PROMPTLAR-GUN1.md</p>
+<p style="position:absolute;right:96px;bottom:64px;font-size:24px;font-weight:600;letter-spacing:1px;color:#8FA0BD">18 / 45</p>
+
+</section>
+<section class="slide" id="m1-demo-b" style="background:#0E1B33;color:#C5D0E3;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:36px">
+<div style="display:flex;align-items:center;gap:24px">
+<p style="font-size:24px;letter-spacing:3px;text-transform:uppercase;font-weight:700;color:#14213D;background:#F0A33A;padding:10px 24px;border-radius:999px">Canlı demo</p>
+<p style="font-size:28px;color:#8FA0BD">D3 · D4</p>
+</div>
+<h2 style="font-size:68px;font-weight:700;color:#F5F6F2;line-height:1.1">Olasılıksal çıktı ve halüsinasyon</h2>
+<div style="display:grid;grid-template-columns:5fr 6fr;gap:48px">
+<div style="display:flex;flex-direction:column;gap:20px">
+<div style="display:flex;flex-direction:column;gap:6px"><h3 style="font-size:30px;font-weight:600;color:#F0A33A">D3 · Aynı soru, üç yeni sohbet</h3><p style="font-size:26px;line-height:1.4">Karşılaştır: mod-97 var mı, boşluk ve büyük harf işleniyor mu?</p></div>
+<div style="display:flex;flex-direction:column;gap:6px"><h3 style="font-size:30px;font-weight:600;color:#F0A33A">D4 · Olmayan paket</h3><p style="font-size:26px;line-height:1.4">Sonra nuget.org'da ara: paket yok. Uydurdu mu, uyardı mı?</p></div>
+</div>
+<div style="display:flex;flex-direction:column;gap:16px">
+<div style="background:#0A1428;border:1px solid #2A3D63;border-radius:16px;padding:26px;display:flex;flex-direction:column;gap:8px"><p style="font-size:24px;letter-spacing:3px;text-transform:uppercase;color:#8FA0BD;font-weight:600">D3 · Ask</p><p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:26px;line-height:1.5;color:#F5F6F2">C# ile Türk IBAN numarasını doğrulayan bir metot yaz. Sadece kodu ver.</p></div>
+<div style="background:#0A1428;border:1px solid #2A3D63;border-radius:16px;padding:26px;display:flex;flex-direction:column;gap:8px"><p style="font-size:24px;letter-spacing:3px;text-transform:uppercase;color:#8FA0BD;font-weight:600">D4 · Ask</p><p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:24px;line-height:1.5;color:#F5F6F2">Projeye Microsoft.Banking.Iban NuGet paketini ekleyip IBAN doğrulamasını onunla yap. Hangi sınıf ve metodu kullanmalıyım?</p></div>
+</div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1400px;font-size:24px;color:#8FA0BD">Branch: canli/d1-m1 · docs/PROMPTLAR-GUN1.md</p>
+<p style="position:absolute;right:96px;bottom:64px;font-size:24px;font-weight:600;letter-spacing:1px;color:#8FA0BD">19 / 45</p>
+
+</section>
+<section class="slide" id="m1-dogrulama" style="background:#F5F6F2;color:#3E4A5E;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:40px">
+<div style="display:flex;flex-direction:column;gap:16px">
+<p style="font-size:24px;letter-spacing:3px;text-transform:uppercase;color:#2E6BD6;font-weight:600">Çıktı doğrulama</p>
+<h2 style="font-size:72px;font-weight:700;color:#14213D;line-height:1.1">Yedi katman: en ucuzdan en pahalıya</h2>
+</div>
+<div style="display:flex;align-items:end;gap:16px;flex:1">
+<div style="flex:1;height:180px;background:#E9EDF2;border-radius:12px;padding:20px;display:flex;flex-direction:column;justify-content:end;gap:6px"><p style="font-size:36px;font-weight:700;color:#14213D">1</p><p style="font-size:26px;font-weight:600;color:#14213D">Oku</p><p style="font-size:24px">diff'i satır satır</p></div>
+<div style="flex:1;height:240px;background:#E9EDF2;border-radius:12px;padding:20px;display:flex;flex-direction:column;justify-content:end;gap:6px"><p style="font-size:36px;font-weight:700;color:#14213D">2</p><p style="font-size:26px;font-weight:600;color:#14213D">Derle</p><p style="font-size:24px">uydurma API'ler</p></div>
+<div style="flex:1;height:300px;background:#D3DCE8;border-radius:12px;padding:20px;display:flex;flex-direction:column;justify-content:end;gap:6px"><p style="font-size:36px;font-weight:700;color:#14213D">3</p><p style="font-size:26px;font-weight:600;color:#14213D">Statik analiz</p><p style="font-size:24px">analyzer, CodeQL</p></div>
+<div style="flex:1;height:360px;background:#D3DCE8;border-radius:12px;padding:20px;display:flex;flex-direction:column;justify-content:end;gap:6px"><p style="font-size:36px;font-weight:700;color:#14213D">4</p><p style="font-size:26px;font-weight:600;color:#14213D">Test çalıştır</p><p style="font-size:24px">kırıldı mı?</p></div>
+<div style="flex:1;height:420px;background:#5A7BB5;border-radius:12px;padding:20px;display:flex;flex-direction:column;justify-content:end;gap:6px"><p style="font-size:36px;font-weight:700;color:#F5F6F2">5</p><p style="font-size:26px;font-weight:600;color:#F5F6F2">Testi incele</p><p style="font-size:24px;color:#F5F6F2">doğru şeyi mi?</p></div>
+<div style="flex:1;height:480px;background:#14213D;border-radius:12px;padding:20px;display:flex;flex-direction:column;justify-content:end;gap:6px"><p style="font-size:36px;font-weight:700;color:#F0A33A">6</p><p style="font-size:26px;font-weight:600;color:#F5F6F2">İnsan incelemesi</p><p style="font-size:24px;color:#C5D0E3">PR'da iş kuralı</p></div>
+<div style="flex:1;height:540px;background:#14213D;border-radius:12px;padding:20px;display:flex;flex-direction:column;justify-content:end;gap:6px"><p style="font-size:36px;font-weight:700;color:#F0A33A">7</p><p style="font-size:26px;font-weight:600;color:#F5F6F2">Çalışma zamanı</p><p style="font-size:24px;color:#C5D0E3">staging, log</p></div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1400px;font-size:24px;color:#6B7587">Gün 1 · Modül 1 — Giriş</p>
+<p style="position:absolute;right:96px;bottom:64px;font-size:24px;font-weight:600;letter-spacing:1px;color:#6B7587">20 / 45</p>
+
+</section>
+<section class="slide" id="m1-ilke" data-transition="fade" style="background:#0E1B33;color:#F5F6F2;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;justify-content:center;gap:48px">
+<p style="font-size:28px;letter-spacing:4px;text-transform:uppercase;color:#F0A33A;font-weight:600">Eğitimin temel ilkesi</p>
+<h1 style="font-size:96px;font-weight:700;line-height:1.15;color:#F5F6F2">YZ'nin yazdığı kodun sahibi, onu birleştiren geliştiricidir.</h1>
+<p style="font-size:36px;color:#C5D0E3">“YZ yazdı” bir gerekçe değildir.</p>
+<p style="position:absolute;right:96px;bottom:64px;font-size:24px;font-weight:600;letter-spacing:1px;color:#8FA0BD">21 / 45</p>
+
+</section>
+<section class="slide" id="m1-kurum" style="background:#F5F6F2;color:#3E4A5E;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px">
+<div style="display:flex;flex-direction:column;gap:16px">
+<p style="font-size:24px;letter-spacing:3px;text-transform:uppercase;color:#2E6BD6;font-weight:600">Kurumunuzda bu ne demek?</p>
+<h2 style="font-size:72px;font-weight:700;color:#14213D;line-height:1.1">Pazartesi sabahı uygulanacak üç şey</h2>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:32px">
+<div style="display:flex;flex-direction:column;gap:20px;background:#FCFCFA;border:1px solid #DDE3EA;border-radius:16px;padding:40px">
+<span style="display:inline-block;color:#2E6BD6;width:56px;height:56px"><svg viewBox="0 0 24 24" width="100%" height="100%" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.7 4 3 9 3s9-1.3 9-3V5"/><path d="M3 12c0 1.7 4 3 9 3s9-1.3 9-3"/></svg></span>
+<p style="font-size:36px;font-weight:700;color:#14213D;line-height:1.2">Paket kaynağı tek kapı</p>
+<p style="font-size:28px;line-height:1.4">Paketler yalnızca kurumun iç NuGet akışından gelsin. Uydurma paket adı sisteme giremez.</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:20px;background:#FCFCFA;border:1px solid #DDE3EA;border-radius:16px;padding:40px">
+<span style="display:inline-block;color:#2E6BD6;width:56px;height:56px"><svg viewBox="0 0 24 24" width="100%" height="100%" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>
+<p style="font-size:36px;font-weight:700;color:#14213D;line-height:1.2">PR şablonuna tek satır</p>
+<p style="font-size:28px;line-height:1.4">“YZ ile üretilen kodu okudum, testlerini inceledim.” İşaretlenmeden birleştirme yok.</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:20px;background:#FCFCFA;border:1px solid #DDE3EA;border-radius:16px;padding:40px">
+<span style="display:inline-block;color:#2E6BD6;width:56px;height:56px"><svg viewBox="0 0 24 24" width="100%" height="100%" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></span>
+<p style="font-size:36px;font-weight:700;color:#14213D;line-height:1.2">Ölçmeden karar yok</p>
+<p style="font-size:28px;line-height:1.4">Kabul oranı değil; teslim süresi, hata oranı ve geri dönüş süresi izlenmeli.</p>
+</div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1400px;font-size:24px;color:#6B7587">Gün 1 · Modül 1 — Giriş</p>
+<p style="position:absolute;right:96px;bottom:64px;font-size:24px;font-weight:600;letter-spacing:1px;color:#6B7587">22 / 45</p>
+
+</section>
+<section class="slide" id="m2-bolum" data-transition="fade" style="background:#0E1B33;color:#F5F6F2;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;justify-content:center;gap:32px">
+<p style="font-size:200px;font-weight:700;line-height:1;color:#F0A33A">02</p>
+<p style="font-size:28px;letter-spacing:4px;text-transform:uppercase;color:#8FA0BD;font-weight:600">Modül 2</p>
+<h1 style="font-size:96px;font-weight:700;line-height:1.1;color:#F5F6F2">Prompt ve bağlam mühendisliği</h1>
+<p style="font-size:40px;color:#C5D0E3">İyi prompt yazmak ve Copilot'u kurumun standartlarına bağlamak</p>
+<p style="position:absolute;right:96px;bottom:64px;font-size:24px;font-weight:600;letter-spacing:1px;color:#8FA0BD">23 / 45</p>
+
+</section>
+<section class="slide" id="m2-durum" style="background:#F5F6F2;color:#3E4A5E;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px">
+<div style="display:flex;flex-direction:column;gap:16px">
+<p style="font-size:24px;letter-spacing:3px;text-transform:uppercase;color:#2E6BD6;font-weight:600">Bankada yaşanan durum</p>
+<h2 style="font-size:72px;font-weight:700;color:#14213D;line-height:1.1">Aynı ekip, aynı prompt, üç farklı kod</h2>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:32px">
+<div style="display:flex;flex-direction:column;gap:16px;background:#FCFCFA;border:1px solid #DDE3EA;border-radius:16px;padding:40px">
+<p style="font-size:28px;font-weight:600;color:#6B7587">Geliştirici A</p>
+<p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:26px;line-height:1.5;color:#14213D">throw new Exception(...)</p>
+<p style="font-size:26px">500 döner, mesaj yok</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:16px;background:#FCFCFA;border:1px solid #DDE3EA;border-radius:16px;padding:40px">
+<p style="font-size:28px;font-weight:600;color:#6B7587">Geliştirici B</p>
+<p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:26px;line-height:1.5;color:#14213D">return BadRequest("hata")</p>
+<p style="font-size:26px">Düz metin, kod yok</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:16px;background:#0E1B33;border-radius:16px;padding:40px">
+<p style="font-size:28px;font-weight:600;color:#8FA0BD">Kurum standardı</p>
+<p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:26px;line-height:1.5;color:#F0A33A">Result&lt;T&gt; → ProblemDetails</p>
+<p style="font-size:26px;color:#C5D0E3">Hata kodu, tip, 422</p>
+</div>
+</div>
+<p style="font-size:40px;font-weight:600;color:#14213D">Copilot standardı bilmiyorsa, her geliştiriciye farklı bir standart uydurur.</p>
+<p style="position:absolute;left:128px;bottom:64px;width:1400px;font-size:24px;color:#6B7587">Gün 1 · Modül 2 — Prompt ve bağlam mühendisliği</p>
+<p style="position:absolute;right:96px;bottom:64px;font-size:24px;font-weight:600;letter-spacing:1px;color:#6B7587">24 / 45</p>
+
+</section>
+<section class="slide" id="m2-anatomi" style="background:#F5F6F2;color:#3E4A5E;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px">
+<div style="display:flex;flex-direction:column;gap:16px">
+<p style="font-size:24px;letter-spacing:3px;text-transform:uppercase;color:#2E6BD6;font-weight:600">İyi bir prompt'un anatomisi</p>
+<h2 style="font-size:72px;font-weight:700;color:#14213D;line-height:1.1">Beş parça, her biri bir tahmini ortadan kaldırır</h2>
+</div>
+<div style="display:grid;grid-template-columns:repeat(5, 1fr);gap:20px;flex:1">
+<div style="display:flex;flex-direction:column;gap:16px;background:#FCFCFA;border:1px solid #DDE3EA;border-top:8px solid #2E6BD6;border-radius:16px;padding:32px">
+<p style="font-size:48px;font-weight:700;color:#2E6BD6">1</p>
+<p style="font-size:34px;font-weight:700;color:#14213D">Hedef</p>
+<p style="font-size:26px;line-height:1.4">Ne değişecek, hangi metot, hangi dosya?</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:16px;background:#FCFCFA;border:1px solid #DDE3EA;border-top:8px solid #2E6BD6;border-radius:16px;padding:32px">
+<p style="font-size:48px;font-weight:700;color:#2E6BD6">2</p>
+<p style="font-size:34px;font-weight:700;color:#14213D">Bağlam</p>
+<p style="font-size:26px;line-height:1.4">İlgili dosyalar, mevcut desen, iş kuralı</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:16px;background:#FCFCFA;border:1px solid #DDE3EA;border-top:8px solid #2E6BD6;border-radius:16px;padding:32px">
+<p style="font-size:48px;font-weight:700;color:#2E6BD6">3</p>
+<p style="font-size:34px;font-weight:700;color:#14213D">Kısıtlar</p>
+<p style="font-size:26px;line-height:1.4">Yapma dediklerin: exception yok, yeni paket yok</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:16px;background:#FCFCFA;border:1px solid #DDE3EA;border-top:8px solid #2E6BD6;border-radius:16px;padding:32px">
+<p style="font-size:48px;font-weight:700;color:#2E6BD6">4</p>
+<p style="font-size:34px;font-weight:700;color:#14213D">Kabul kriteri</p>
+<p style="font-size:26px;line-height:1.4">Bittiğini nasıl anlarız? Test, komut, sınır değer</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:16px;background:#FCFCFA;border:1px solid #DDE3EA;border-top:8px solid #2E6BD6;border-radius:16px;padding:32px">
+<p style="font-size:48px;font-weight:700;color:#2E6BD6">5</p>
+<p style="font-size:34px;font-weight:700;color:#14213D">Çıktı biçimi</p>
+<p style="font-size:26px;line-height:1.4">Sadece kod mu, plan mı, tablo mu?</p>
+</div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1400px;font-size:24px;color:#6B7587">Gün 1 · Modül 2 — Prompt ve bağlam mühendisliği</p>
+<p style="position:absolute;right:96px;bottom:64px;font-size:24px;font-weight:600;letter-spacing:1px;color:#6B7587">25 / 45</p>
+
+</section>
+<section class="slide" id="m2-kotu-iyi" style="background:#0E1B33;color:#C5D0E3;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:36px">
+<div style="display:flex;align-items:center;gap:24px">
+<p style="font-size:24px;letter-spacing:3px;text-transform:uppercase;font-weight:700;color:#14213D;background:#F0A33A;padding:10px 24px;border-radius:999px">Canlı demo</p>
+<p style="font-size:28px;color:#8FA0BD">D5</p>
+</div>
+<h2 style="font-size:68px;font-weight:700;color:#F5F6F2;line-height:1.1">Kötü prompt, iyi prompt</h2>
+<div style="display:grid;grid-template-columns:5fr 6fr;gap:48px">
+<div style="display:flex;flex-direction:column;gap:20px">
+<div style="display:flex;flex-direction:column;gap:6px"><h3 style="font-size:30px;font-weight:600;color:#F0A33A">Kötü · Agent</h3><p style="font-size:26px;line-height:1.4">Neyi doğrulayacak? Nerede? Hata nasıl dönecek? Ajan beş tahmin yapar.</p></div>
+<div style="display:flex;flex-direction:column;gap:6px"><h3 style="font-size:30px;font-weight:600;color:#F0A33A">İyi · Agent</h3><p style="font-size:26px;line-height:1.4">Hedef, kısıt, kabul kriteri: ajan işin ne zaman bittiğini bilir.</p></div>
+</div>
+<div style="display:flex;flex-direction:column;gap:16px">
+<div style="background:#0A1428;border:1px solid #2A3D63;border-radius:16px;padding:26px;display:flex;flex-direction:column;gap:8px"><p style="font-size:24px;letter-spacing:3px;text-transform:uppercase;color:#8FA0BD;font-weight:600">Kötü</p><p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:28px;line-height:1.5;color:#F5F6F2">Transfere validasyon ekle.</p></div>
+<div style="background:#0A1428;border:1px solid #2A3D63;border-radius:16px;padding:26px;display:flex;flex-direction:column;gap:8px"><p style="font-size:24px;letter-spacing:3px;text-transform:uppercase;color:#8FA0BD;font-weight:600">İyi</p><p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:24px;line-height:1.5;color:#F5F6F2">TransferService.TransferAsync metoduna açıklama alanı için doğrulama ekle: en fazla 140 karakter · aşarsa transfer.description_too_long · Result&lt;T&gt; deseni, exception yok · xUnit testi yaz, dotnet test ile doğrula.</p></div>
+</div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1400px;font-size:24px;color:#8FA0BD">Branch: canli/d1-m2 · her prompt yeni sohbette · docs/PROMPTLAR-GUN1.md</p>
+<p style="position:absolute;right:96px;bottom:64px;font-size:24px;font-weight:600;letter-spacing:1px;color:#8FA0BD">26 / 45</p>
+
+</section>
+<section class="slide" id="m2-baglam" style="background:#F5F6F2;color:#3E4A5E;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:40px">
+<div style="display:flex;flex-direction:column;gap:16px">
+<p style="font-size:24px;letter-spacing:3px;text-transform:uppercase;color:#2E6BD6;font-weight:600">Bağlamı elle vermek</p>
+<h2 style="font-size:72px;font-weight:700;color:#14213D;line-height:1.1">Sohbette # ve @ ile neyi işaret edersiniz?</h2>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px 48px">
+<div style="display:flex;gap:24px;align-items:baseline;border-bottom:1px solid #DDE3EA;padding-bottom:16px"><p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:30px;color:#2E6BD6;width:400px;flex-shrink:0">#file</p><p style="font-size:28px">Belirli bir dosya</p></div>
+<div style="display:flex;gap:24px;align-items:baseline;border-bottom:1px solid #DDE3EA;padding-bottom:16px"><p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:30px;color:#2E6BD6;width:400px;flex-shrink:0">#selection</p><p style="font-size:28px">Editörde seçili kod</p></div>
+<div style="display:flex;gap:24px;align-items:baseline;border-bottom:1px solid #DDE3EA;padding-bottom:16px"><p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:30px;color:#2E6BD6;width:400px;flex-shrink:0">#codebase</p><p style="font-size:28px">Depoda anlamsal arama</p></div>
+<div style="display:flex;gap:24px;align-items:baseline;border-bottom:1px solid #DDE3EA;padding-bottom:16px"><p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:30px;color:#2E6BD6;width:400px;flex-shrink:0">#problems</p><p style="font-size:28px">Derleyici hataları ve uyarılar</p></div>
+<div style="display:flex;gap:24px;align-items:baseline;border-bottom:1px solid #DDE3EA;padding-bottom:16px"><p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:30px;color:#2E6BD6;width:400px;flex-shrink:0">#usages</p><p style="font-size:28px">Bir sembolün kullanıldığı yerler</p></div>
+<div style="display:flex;gap:24px;align-items:baseline;border-bottom:1px solid #DDE3EA;padding-bottom:16px"><p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:30px;color:#2E6BD6;width:400px;flex-shrink:0">#terminalLastCommand</p><p style="font-size:28px">Son komut ve çıktısı</p></div>
+<div style="display:flex;gap:24px;align-items:baseline;border-bottom:1px solid #DDE3EA;padding-bottom:16px"><p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:30px;color:#2E6BD6;width:400px;flex-shrink:0">#fetch</p><p style="font-size:28px">Bir web sayfasının içeriği</p></div>
+<div style="display:flex;gap:24px;align-items:baseline;border-bottom:1px solid #DDE3EA;padding-bottom:16px"><p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:30px;color:#2E6BD6;width:400px;flex-shrink:0">@vscode · @terminal</p><p style="font-size:28px">Uzman katılımcılar</p></div>
+</div>
+<div style="display:flex;align-items:center;gap:24px;background:#FCFCFA;border:1px solid #DDE3EA;border-radius:16px;padding:28px 40px">
+<span style="display:inline-block;color:#9A5B00;width:48px;height:48px;flex-shrink:0"><svg viewBox="0 0 24 24" width="100%" height="100%" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 22h4"/><path d="M15.1 14c.2-1 .7-1.7 1.5-2.5A6 6 0 1 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/></svg></span>
+<p style="font-size:30px;color:#14213D">Az ama doğru bağlam, çok ama gürültülü bağlamdan iyidir. <span style="font-family:'JetBrains Mono', 'Courier New', monospace;color:#2E6BD6">/init</span> depo için talimat dosyasını başlatır.</p>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1400px;font-size:24px;color:#6B7587">Gün 1 · Modül 2 — Prompt ve bağlam mühendisliği</p>
+<p style="position:absolute;right:96px;bottom:64px;font-size:24px;font-weight:600;letter-spacing:1px;color:#6B7587">27 / 45</p>
+
+</section>
+<section class="slide" id="m2-kaliplar" style="background:#F5F6F2;color:#3E4A5E;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px">
+<div style="display:flex;flex-direction:column;gap:16px">
+<p style="font-size:24px;letter-spacing:3px;text-transform:uppercase;color:#2E6BD6;font-weight:600">İşe yarayan kalıplar</p>
+<h2 style="font-size:72px;font-weight:700;color:#14213D;line-height:1.1">Altı kalıp, her gün kullanılır</h2>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:28px">
+<div style="display:flex;flex-direction:column;gap:12px;background:#FCFCFA;border:1px solid #DDE3EA;border-radius:16px;padding:36px">
+<p style="font-size:34px;font-weight:700;color:#14213D">Önce plan</p>
+<p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:24px;line-height:1.45;color:#2E6BD6">“Kod yazmadan önce planını göster.”</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:12px;background:#FCFCFA;border:1px solid #DDE3EA;border-radius:16px;padding:36px">
+<p style="font-size:34px;font-weight:700;color:#14213D">Örnekle göster</p>
+<p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:24px;line-height:1.45;color:#2E6BD6">“#file:TransferEndpoints.cs yapısına uy.”</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:12px;background:#FCFCFA;border:1px solid #DDE3EA;border-radius:16px;padding:36px">
+<p style="font-size:34px;font-weight:700;color:#14213D">Bana soru sor</p>
+<p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:24px;line-height:1.45;color:#2E6BD6">“Belirsiz noktaları başlamadan sor.”</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:12px;background:#FCFCFA;border:1px solid #DDE3EA;border-radius:16px;padding:36px">
+<p style="font-size:34px;font-weight:700;color:#14213D">Kendini doğrula</p>
+<p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:24px;line-height:1.45;color:#2E6BD6">“dotnet test çalıştır, sonucu özetle.”</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:12px;background:#FCFCFA;border:1px solid #DDE3EA;border-radius:16px;padding:36px">
+<p style="font-size:34px;font-weight:700;color:#14213D">Sınır çiz</p>
+<p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:24px;line-height:1.45;color:#2E6BD6">“Sadece bu dosyayı değiştir. Testlere dokunma.”</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:12px;background:#FCFCFA;border:1px solid #DDE3EA;border-radius:16px;padding:36px">
+<p style="font-size:34px;font-weight:700;color:#14213D">Eleştirmen rolü</p>
+<p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:24px;line-height:1.45;color:#2E6BD6">“Bu kodda hangi hatalar olabilir?”</p>
+</div>
+</div>
+<div style="display:flex;align-items:center;gap:24px">
+<span style="display:inline-block;color:#9A5B00;width:48px;height:48px;flex-shrink:0"><svg viewBox="0 0 24 24" width="100%" height="100%" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></span>
+<p style="font-size:32px;font-weight:600;color:#14213D">Sohbet saptıysa düzeltmeye çalışma: yeni sohbet aç, prompt'u iyileştir.</p>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1400px;font-size:24px;color:#6B7587">Gün 1 · Modül 2 — Prompt ve bağlam mühendisliği</p>
+<p style="position:absolute;right:96px;bottom:64px;font-size:24px;font-weight:600;letter-spacing:1px;color:#6B7587">28 / 45</p>
+
+</section>
+<section class="slide" id="m2-katmanlar" style="background:#F5F6F2;color:#3E4A5E;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:40px">
+<div style="display:flex;flex-direction:column;gap:16px">
+<p style="font-size:24px;letter-spacing:3px;text-transform:uppercase;color:#2E6BD6;font-weight:600">Özelleştirme katmanları</p>
+<h2 style="font-size:72px;font-weight:700;color:#14213D;line-height:1.1">Hangisi ne zaman devreye girer?</h2>
+</div>
+<div style="display:flex;flex-direction:column;gap:14px">
+<div style="display:grid;grid-template-columns:520px 1fr 300px;gap:32px;align-items:center;background:#0E1B33;border-radius:14px;padding:22px 36px">
+<p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:26px;color:#F0A33A">copilot-instructions.md</p>
+<p style="font-size:28px;color:#C5D0E3">Depo geneli kurallar</p>
+<p style="font-size:26px;font-weight:600;color:#F5F6F2;text-align:right">Her prompt'ta</p>
+</div>
+<div style="display:grid;grid-template-columns:520px 1fr 300px;gap:32px;align-items:center;background:#1F3560;border-radius:14px;padding:22px 36px">
+<p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:26px;color:#F0A33A">*.instructions.md</p>
+<p style="font-size:28px;color:#C5D0E3">Dosya türüne özel kurallar</p>
+<p style="font-size:26px;font-weight:600;color:#F5F6F2;text-align:right">applyTo eşleşince</p>
+</div>
+<div style="display:grid;grid-template-columns:520px 1fr 300px;gap:32px;align-items:center;background:#2E6BD6;border-radius:14px;padding:22px 36px">
+<p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:26px;color:#FFE2B5">SKILL.md</p>
+<p style="font-size:28px;color:#F5F6F2">Talimat + şablon + betik paketi</p>
+<p style="font-size:26px;font-weight:600;color:#F5F6F2;text-align:right">Konu ilgili olunca</p>
+</div>
+<div style="display:grid;grid-template-columns:520px 1fr 300px;gap:32px;align-items:center;background:#D3DCE8;border-radius:14px;padding:22px 36px">
+<p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:26px;color:#14213D">*.prompt.md</p>
+<p style="font-size:28px;color:#3E4A5E">Tekrar eden görev</p>
+<p style="font-size:26px;font-weight:600;color:#14213D;text-align:right">/ ile çağrılınca</p>
+</div>
+<div style="display:grid;grid-template-columns:520px 1fr 300px;gap:32px;align-items:center;background:#E9EDF2;border-radius:14px;padding:22px 36px">
+<p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:26px;color:#14213D">*.agent.md</p>
+<p style="font-size:28px;color:#3E4A5E">Rol + araç kısıtı</p>
+<p style="font-size:26px;font-weight:600;color:#14213D;text-align:right">Seçiciden seçilince</p>
+</div>
+<div style="display:grid;grid-template-columns:520px 1fr 300px;gap:32px;align-items:center;background:#FCFCFA;border:1px dashed #9AA6B8;border-radius:14px;padding:22px 36px">
+<p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:26px;color:#14213D">MCP sunucusu</p>
+<p style="font-size:28px;color:#3E4A5E">Dış sistemlere araç</p>
+<p style="font-size:26px;font-weight:600;color:#14213D;text-align:right">Ajan çağırınca</p>
+</div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1400px;font-size:24px;color:#6B7587">Gün 1 · Modül 2 — Prompt ve bağlam mühendisliği · hepsi .github/ altında, depoyla birlikte sürümlenir</p>
+<p style="position:absolute;right:96px;bottom:64px;font-size:24px;font-weight:600;letter-spacing:1px;color:#6B7587">29 / 45</p>
+
+</section>
+<section class="slide" id="m2-instructions" style="background:#F5F6F2;color:#3E4A5E;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:40px">
+<div style="display:flex;flex-direction:column;gap:16px">
+<p style="font-size:24px;letter-spacing:3px;text-transform:uppercase;color:#2E6BD6;font-weight:600">Katman 1 · Depo talimatları</p>
+<h2 style="font-size:72px;font-weight:700;color:#14213D;line-height:1.1">Standart bir kez yazılır, her prompt'ta uygulanır</h2>
+</div>
+<div style="display:grid;grid-template-columns:3fr 2fr;gap:48px">
+<div style="background:#0A1428;border-radius:16px;padding:36px;display:flex;flex-direction:column;gap:6px">
+<p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:22px;color:#8FA0BD">.github/copilot-instructions.md</p>
+<p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:24px;line-height:1.55;color:#F5F6F2"><span style="color:#F0A33A">## Kodlama kuralları</span><br>- İş hatasında exception yok; Result&lt;T&gt; döndür.<br>- Para her zaman decimal.<br>- Hata yanıtları ProblemDetails.<br>- “Şimdi” için TimeProvider kullan.<br>- Yeni NuGet paketinden önce sor.<br><span style="color:#F0A33A">## Güvenlik</span><br>- Log'a ad, TCKN, IBAN yazma.<br>- SQL yalnızca parametreli.<br><span style="color:#F0A33A">## Doğrulama</span><br>- dotnet build + dotnet test çalıştır.</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:28px">
+<div style="display:flex;gap:20px;align-items:flex-start"><span style="display:inline-block;color:#2E6BD6;width:40px;height:40px;flex-shrink:0"><svg viewBox="0 0 24 24" width="100%" height="100%" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span><p style="font-size:30px;line-height:1.35">Kısa ve somut: kural, gerekçe değil</p></div>
+<div style="display:flex;gap:20px;align-items:flex-start"><span style="display:inline-block;color:#2E6BD6;width:40px;height:40px;flex-shrink:0"><svg viewBox="0 0 24 24" width="100%" height="100%" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span><p style="font-size:30px;line-height:1.35">Modelin tahmin edemeyeceği şeyler</p></div>
+<div style="display:flex;gap:20px;align-items:flex-start"><span style="display:inline-block;color:#2E6BD6;width:40px;height:40px;flex-shrink:0"><svg viewBox="0 0 24 24" width="100%" height="100%" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span><p style="font-size:30px;line-height:1.35">Nasıl doğrulanacağı yazılı</p></div>
+<div style="display:flex;gap:20px;align-items:flex-start"><span style="display:inline-block;color:#B23A2B;width:40px;height:40px;flex-shrink:0"><svg viewBox="0 0 24 24" width="100%" height="100%" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.7 18-8-14a2 2 0 0 0-3.5 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.7-3z"/><path d="M12 9v4M12 17h.01"/></svg></span><p style="font-size:30px;line-height:1.35">“İyi kod yaz” gibi genel öğütler</p></div>
+<div style="display:flex;gap:20px;align-items:flex-start"><span style="display:inline-block;color:#B23A2B;width:40px;height:40px;flex-shrink:0"><svg viewBox="0 0 24 24" width="100%" height="100%" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.7 18-8-14a2 2 0 0 0-3.5 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.7-3z"/><path d="M12 9v4M12 17h.01"/></svg></span><p style="font-size:30px;line-height:1.35">Sayfalarca doküman</p></div>
+</div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1400px;font-size:24px;color:#6B7587">Gün 1 · Modül 2 — Prompt ve bağlam mühendisliği</p>
+<p style="position:absolute;right:96px;bottom:64px;font-size:24px;font-weight:600;letter-spacing:1px;color:#6B7587">30 / 45</p>
+
+</section>
+<section class="slide" id="m2-promptfile" style="background:#F5F6F2;color:#3E4A5E;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:40px">
+<div style="display:flex;flex-direction:column;gap:16px">
+<p style="font-size:24px;letter-spacing:3px;text-transform:uppercase;color:#2E6BD6;font-weight:600">Katman 2 ve 4 · Hedefli talimat, tekrar eden görev</p>
+<h2 style="font-size:72px;font-weight:700;color:#14213D;line-height:1.1">applyTo ile dosyaya, / ile göreve bağla</h2>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:40px">
+<div style="display:flex;flex-direction:column;gap:20px">
+<div style="background:#0A1428;border-radius:16px;padding:32px;display:flex;flex-direction:column;gap:6px">
+<p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:21px;color:#8FA0BD">instructions/tests.instructions.md</p>
+<p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:23px;line-height:1.55;color:#F5F6F2"><span style="color:#8FA0BD">---</span><br><span style="color:#F0A33A">applyTo:</span> "tests/**/*.cs"<br><span style="color:#8FA0BD">---</span><br>- Ad: Metot_Durum_BeklenenSonuç<br>- Sınır değer: 0, limit, limit+0,01<br>- Mock kütüphanesi yok; Fakes/<br>- Var olan beklentiyi değiştirme</p>
+</div>
+<p style="font-size:28px;line-height:1.4">Test dosyasıyla çalışırken <b style="color:#14213D">otomatik</b> eklenir. Diğer dosyalarda bağlamı kirletmez.</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:20px">
+<div style="background:#0A1428;border-radius:16px;padding:32px;display:flex;flex-direction:column;gap:6px">
+<p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:21px;color:#8FA0BD">prompts/yeni-endpoint.prompt.md</p>
+<p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:23px;line-height:1.55;color:#F5F6F2"><span style="color:#8FA0BD">---</span><br><span style="color:#F0A33A">agent:</span> agent<br><span style="color:#8FA0BD">---</span><br>Şu endpoint'i ekle: <span style="color:#7FD1A0">${input:endpoint}</span><br>1. Contracts/ altına record<br>2. Servis + Result&lt;T&gt;<br>3. #file:TransferEndpoints.cs'e uy<br>4. Test yaz · 5. .http · 6. dotnet test</p>
+</div>
+<p style="font-size:28px;line-height:1.4">Sohbette <span style="font-family:'JetBrains Mono', 'Courier New', monospace;color:#2E6BD6">/yeni-endpoint Hesaba para yatırma</span> ile çağrılır.</p>
+</div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1400px;font-size:24px;color:#6B7587">Gün 1 · Modül 2 — Prompt ve bağlam mühendisliği</p>
+<p style="position:absolute;right:96px;bottom:64px;font-size:24px;font-weight:600;letter-spacing:1px;color:#6B7587">31 / 45</p>
+
+</section>
+<section class="slide" id="m2-agent-skill" style="background:#F5F6F2;color:#3E4A5E;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:40px">
+<div style="display:flex;flex-direction:column;gap:16px">
+<p style="font-size:24px;letter-spacing:3px;text-transform:uppercase;color:#2E6BD6;font-weight:600">Katman 3 ve 5 · Skill ve custom agent</p>
+<h2 style="font-size:72px;font-weight:700;color:#14213D;line-height:1.1">Skill bilgi paketler, agent rolü kısıtlar</h2>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:40px">
+<div style="display:flex;flex-direction:column;gap:20px">
+<div style="background:#0A1428;border-radius:16px;padding:32px;display:flex;flex-direction:column;gap:6px">
+<p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:21px;color:#8FA0BD">skills/banka-api-standartlari/SKILL.md</p>
+<p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:23px;line-height:1.55;color:#F5F6F2"><span style="color:#8FA0BD">---</span><br><span style="color:#F0A33A">name:</span> banka-api-standartlari<br><span style="color:#F0A33A">description:</span> Yeni bir REST<br>  endpoint eklenirken kurumun API<br>  ve hata yanıtı standartlarını uygular.<br><span style="color:#8FA0BD">---</span><br>+ endpoint-sablonu.md<br>+ hata-yaniti-formati.md</p>
+</div>
+<p style="font-size:28px;line-height:1.4">Model önce yalnızca <b style="color:#14213D">açıklamayı</b> görür; konu eşleşince gövdeyi ve ek dosyaları yükler.</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:20px">
+<div style="background:#0A1428;border-radius:16px;padding:32px;display:flex;flex-direction:column;gap:6px">
+<p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:21px;color:#8FA0BD">agents/guvenlik-inceleyici.agent.md</p>
+<p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:23px;line-height:1.55;color:#F5F6F2"><span style="color:#8FA0BD">---</span><br><span style="color:#F0A33A">description:</span> OWASP'a göre inceler;<br>  kod değiştirmez.<br><span style="color:#F0A33A">tools:</span> [<span style="color:#7FD1A0">'read/readFile','read/problems',<br>  'search/codebase','search/usages', …</span>]<br><span style="color:#8FA0BD">---</span><br>Sen uygulama güvenliği uzmanısın.<br><b>Kod değiştirmezsin.</b></p>
+</div>
+<p style="font-size:28px;line-height:1.4">Düzenleme ve terminal aracı <b style="color:#14213D">listede yok</b>: istese de değiştiremez.</p>
+</div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1400px;font-size:24px;color:#6B7587">Gün 1 · Modül 2 — Prompt ve bağlam mühendisliği · Agent Skills açık bir standarttır (agentskills.io)</p>
+<p style="position:absolute;right:96px;bottom:64px;font-size:24px;font-weight:600;letter-spacing:1px;color:#6B7587">32 / 45</p>
+
+</section>
+<section class="slide" id="m2-mcp" style="background:#F5F6F2;color:#3E4A5E;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px">
+<div style="display:flex;flex-direction:column;gap:16px">
+<p style="font-size:24px;letter-spacing:3px;text-transform:uppercase;color:#2E6BD6;font-weight:600">Katman 6 · Model Context Protocol</p>
+<h2 style="font-size:72px;font-weight:700;color:#14213D;line-height:1.1">MCP: ajana kurumun sistemlerine kapı</h2>
+</div>
+<div style="display:flex;align-items:center;gap:0">
+<div style="width:380px;background:#0E1B33;border-radius:16px;padding:36px;display:flex;flex-direction:column;gap:12px;align-items:center">
+<span style="display:inline-block;color:#F0A33A;width:64px;height:64px"><svg viewBox="0 0 24 24" width="100%" height="100%" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></span>
+<p style="font-size:32px;font-weight:700;color:#F5F6F2">Copilot ajanı</p>
+<p style="font-size:24px;color:#8FA0BD">VS Code</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:8px"><p style="font-size:22px;color:#6B7587">araç çağrısı</p><div style="width:100%;height:4px;background:#2E6BD6"></div></div>
+<div style="width:380px;background:#2E6BD6;border-radius:16px;padding:36px;display:flex;flex-direction:column;gap:12px;align-items:center">
+<span style="display:inline-block;color:#F5F6F2;width:64px;height:64px"><svg viewBox="0 0 24 24" width="100%" height="100%" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7"/><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/></svg></span>
+<p style="font-size:32px;font-weight:700;color:#F5F6F2">MCP sunucusu</p>
+<p style="font-size:24px;color:#E1EAFB">mcp.json</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:8px"><p style="font-size:22px;color:#6B7587">kimlikle erişim</p><div style="width:100%;height:4px;background:#2E6BD6"></div></div>
+<div style="width:380px;display:flex;flex-direction:column;gap:12px">
+<p style="font-size:28px;background:#FCFCFA;border:1px solid #DDE3EA;border-radius:12px;padding:14px 24px">GitHub · issue, PR</p>
+<p style="font-size:28px;background:#FCFCFA;border:1px solid #DDE3EA;border-radius:12px;padding:14px 24px">Test veritabanı</p>
+<p style="font-size:28px;background:#FCFCFA;border:1px solid #DDE3EA;border-radius:12px;padding:14px 24px">Jira · Confluence</p>
+<p style="font-size:28px;background:#FCFCFA;border:1px solid #DDE3EA;border-radius:12px;padding:14px 24px">Tarayıcı · Playwright</p>
+</div>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:28px">
+<div style="display:flex;gap:16px;align-items:flex-start;background:#FDF1DE;border-radius:14px;padding:28px"><span style="display:inline-block;color:#9A5B00;width:40px;height:40px;flex-shrink:0"><svg viewBox="0 0 24 24" width="100%" height="100%" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.7 18-8-14a2 2 0 0 0-3.5 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.7-3z"/><path d="M12 9v4M12 17h.01"/></svg></span><p style="font-size:26px;line-height:1.4;color:#14213D">Sunucu kendi kodunu çalıştırır: yalnızca onaylı kaynaktan</p></div>
+<div style="display:flex;gap:16px;align-items:flex-start;background:#FDF1DE;border-radius:14px;padding:28px"><span style="display:inline-block;color:#9A5B00;width:40px;height:40px;flex-shrink:0"><svg viewBox="0 0 24 24" width="100%" height="100%" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.7 18-8-14a2 2 0 0 0-3.5 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.7-3z"/><path d="M12 9v4M12 17h.01"/></svg></span><p style="font-size:26px;line-height:1.4;color:#14213D">Okuduğu veri prompt injection taşıyabilir</p></div>
+<div style="display:flex;gap:16px;align-items:flex-start;background:#FDF1DE;border-radius:14px;padding:28px"><span style="display:inline-block;color:#9A5B00;width:40px;height:40px;flex-shrink:0"><svg viewBox="0 0 24 24" width="100%" height="100%" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.7 18-8-14a2 2 0 0 0-3.5 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.7-3z"/><path d="M12 9v4M12 17h.01"/></svg></span><p style="font-size:26px;line-height:1.4;color:#14213D">Kurum politikası: izinli sunucu listesi</p></div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1400px;font-size:24px;color:#6B7587">Gün 1 · Modül 2 — Prompt ve bağlam mühendisliği</p>
+<p style="position:absolute;right:96px;bottom:64px;font-size:24px;font-weight:600;letter-spacing:1px;color:#6B7587">33 / 45</p>
+
+</section>
+<section class="slide" id="m2-demo" style="background:#0E1B33;color:#C5D0E3;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:36px">
+<div style="display:flex;align-items:center;gap:24px">
+<p style="font-size:24px;letter-spacing:3px;text-transform:uppercase;font-weight:700;color:#14213D;background:#F0A33A;padding:10px 24px;border-radius:999px">Canlı demo</p>
+<p style="font-size:28px;color:#8FA0BD">D6</p>
+</div>
+<h2 style="font-size:68px;font-weight:700;color:#F5F6F2;line-height:1.1">Aynı prompt, katman katman değişen sonuç</h2>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:48px">
+<div style="display:flex;flex-direction:column;gap:20px">
+<div style="display:flex;flex-direction:column;gap:6px"><h3 style="font-size:30px;font-weight:600;color:#F0A33A">1 · Özelleştirme yok</h3><p style="font-size:26px;line-height:1.4">Prompt'u ver, sonucu not al</p></div>
+<div style="display:flex;flex-direction:column;gap:6px"><h3 style="font-size:30px;font-weight:600;color:#F0A33A">2 · copilot-instructions.md</h3><p style="font-size:26px;line-height:1.4">Aynı prompt yeni sohbette: fark ne?</p></div>
+<div style="display:flex;flex-direction:column;gap:6px"><h3 style="font-size:30px;font-weight:600;color:#F0A33A">3 · *.instructions.md</h3><p style="font-size:26px;line-height:1.4">applyTo satırını incele</p></div>
+<div style="display:flex;flex-direction:column;gap:6px"><h3 style="font-size:30px;font-weight:600;color:#F0A33A">4 · /yeni-endpoint</h3><p style="font-size:26px;line-height:1.4">Prompt dosyası: görevin tarifi</p></div>
+<div style="display:flex;flex-direction:column;gap:6px"><h3 style="font-size:30px;font-weight:600;color:#F0A33A">5 · Skill</h3><p style="font-size:26px;line-height:1.4">Konu gelince Copilot'un kendisi açtığı paket</p></div>
+<div style="display:flex;flex-direction:column;gap:6px"><h3 style="font-size:30px;font-weight:600;color:#F0A33A">6 · guvenlik-inceleyici</h3><p style="font-size:26px;line-height:1.4">Kod değiştiremeyen inceleme ajanı</p></div>
+</div>
+<div style="display:flex;flex-direction:column;gap:16px">
+<div style="background:#0A1428;border:1px solid #2A3D63;border-radius:16px;padding:26px;display:flex;flex-direction:column;gap:8px"><p style="font-size:24px;letter-spacing:3px;text-transform:uppercase;color:#8FA0BD;font-weight:600">Adım 1 · 2</p><p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:24px;line-height:1.5;color:#F5F6F2">Hesaba para yatırma endpoint'i ekle: POST /accounts/{id}/deposits</p></div>
+<div style="background:#0A1428;border:1px solid #2A3D63;border-radius:16px;padding:26px;display:flex;flex-direction:column;gap:8px"><p style="font-size:24px;letter-spacing:3px;text-transform:uppercase;color:#8FA0BD;font-weight:600">Adım 4</p><p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:24px;line-height:1.5;color:#F5F6F2">/yeni-endpoint Hesaba para yatırma</p></div>
+<div style="background:#0A1428;border:1px solid #2A3D63;border-radius:16px;padding:26px;display:flex;flex-direction:column;gap:8px"><p style="font-size:24px;letter-spacing:3px;text-transform:uppercase;color:#8FA0BD;font-weight:600">Adım 6 · guvenlik-inceleyici</p><p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:24px;line-height:1.5;color:#F5F6F2">#file:src/Bank.Api/Services/AccountService.cs #file:src/Bank.Api/Endpoints/AccountEndpoints.cs dosyalarındaki para yatırma kodunu incele.</p></div>
+</div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1400px;font-size:24px;color:#8FA0BD">Branch: canli/d1-m2 → hazır hali: yedek/d1-m2-son · docs/PROMPTLAR-GUN1.md</p>
+<p style="position:absolute;right:96px;bottom:64px;font-size:24px;font-weight:600;letter-spacing:1px;color:#8FA0BD">34 / 45</p>
+
+</section>
+<section class="slide" id="m2-kurum" style="background:#F5F6F2;color:#3E4A5E;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px">
+<div style="display:flex;flex-direction:column;gap:16px">
+<p style="font-size:24px;letter-spacing:3px;text-transform:uppercase;color:#2E6BD6;font-weight:600">Kurumunuzda bu ne demek?</p>
+<h2 style="font-size:72px;font-weight:700;color:#14213D;line-height:1.1">Standartlarınız dokümanda değil, depoda yaşamalı</h2>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:32px">
+<div style="display:flex;flex-direction:column;gap:20px;background:#FCFCFA;border:1px solid #DDE3EA;border-radius:16px;padding:40px">
+<span style="display:inline-block;color:#2E6BD6;width:56px;height:56px"><svg viewBox="0 0 24 24" width="100%" height="100%" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V2H6.5A2.5 2.5 0 0 0 4 4.5v15z"/><path d="M6.5 17A2.5 2.5 0 0 0 4 19.5 2.5 2.5 0 0 0 6.5 22H20v-5"/></svg></span>
+<p style="font-size:36px;font-weight:700;color:#14213D;line-height:1.2">Kodlama standardı</p>
+<p style="font-size:28px;line-height:1.4">Confluence'taki 40 sayfalık doküman, 30 satırlık talimat dosyasına dönüşsün.</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:20px;background:#FCFCFA;border:1px solid #DDE3EA;border-radius:16px;padding:40px">
+<span style="display:inline-block;color:#2E6BD6;width:56px;height:56px"><svg viewBox="0 0 24 24" width="100%" height="100%" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg></span>
+<p style="font-size:36px;font-weight:700;color:#14213D;line-height:1.2">Güvenlik ekibi</p>
+<p style="font-size:28px;line-height:1.4">Kendi inceleme ajanını ve skill'ini yazıp tüm ekiplere dağıtsın.</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:20px;background:#FCFCFA;border:1px solid #DDE3EA;border-radius:16px;padding:40px">
+<span style="display:inline-block;color:#2E6BD6;width:56px;height:56px"><svg viewBox="0 0 24 24" width="100%" height="100%" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7"/><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/></svg></span>
+<p style="font-size:36px;font-weight:700;color:#14213D;line-height:1.2">MCP politikası</p>
+<p style="font-size:28px;line-height:1.4">Hangi sunucular izinli? Karar kullanım başlamadan verilsin.</p>
+</div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1400px;font-size:24px;color:#6B7587">Gün 1 · Modül 2 — Prompt ve bağlam mühendisliği</p>
+<p style="position:absolute;right:96px;bottom:64px;font-size:24px;font-weight:600;letter-spacing:1px;color:#6B7587">35 / 45</p>
+
+</section>
+<section class="slide" id="m3-bolum" data-transition="fade" style="background:#0E1B33;color:#F5F6F2;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;justify-content:center;gap:32px">
+<p style="font-size:200px;font-weight:700;line-height:1;color:#F0A33A">03</p>
+<p style="font-size:28px;letter-spacing:4px;text-transform:uppercase;color:#8FA0BD;font-weight:600">Modül 3</p>
+<h1 style="font-size:96px;font-weight:700;line-height:1.1;color:#F5F6F2">Spec-odaklı geliştirme</h1>
+<p style="font-size:40px;color:#C5D0E3">Tek cümlelik talepten test edilmiş koda: GitHub Spec Kit</p>
+<p style="position:absolute;right:96px;bottom:64px;font-size:24px;font-weight:600;letter-spacing:1px;color:#8FA0BD">36 / 45</p>
+
+</section>
+<section class="slide" id="m3-durum" style="background:#F5F6F2;color:#3E4A5E;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px">
+<div style="display:flex;flex-direction:column;gap:16px">
+<p style="font-size:24px;letter-spacing:3px;text-transform:uppercase;color:#2E6BD6;font-weight:600">Bankada yaşanan durum</p>
+<h2 style="font-size:72px;font-weight:700;color:#14213D;line-height:1.1">İş biriminden tek cümlelik bir talep geldi</h2>
+</div>
+<div style="background:#0E1B33;border-radius:16px;padding:48px 56px;display:flex;gap:32px;align-items:flex-start">
+<span style="display:inline-block;color:#F0A33A;width:64px;height:64px;flex-shrink:0"><svg viewBox="0 0 24 24" width="100%" height="100%" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span>
+<p style="font-size:44px;line-height:1.35;color:#F5F6F2">“Müşteri kendi hesapları arasında para aktarabilsin. Bu, günlük transfer limitine takılmasın.”</p>
+</div>
+<div style="display:grid;grid-template-columns:repeat(4, 1fr);gap:24px">
+<p style="font-size:30px;line-height:1.35;background:#FCFCFA;border:1px solid #DDE3EA;border-radius:14px;padding:28px;color:#14213D">Sonraki dış transferin limitine sayılır mı?</p>
+<p style="font-size:30px;line-height:1.35;background:#FCFCFA;border:1px solid #DDE3EA;border-radius:14px;padding:28px;color:#14213D">Hesap başkasınınsa 403 mü, 404 mü?</p>
+<p style="font-size:30px;line-height:1.35;background:#FCFCFA;border:1px solid #DDE3EA;border-radius:14px;padding:28px;color:#14213D">TRY hesaptan EUR hesaba olur mu?</p>
+<p style="font-size:30px;line-height:1.35;background:#FCFCFA;border:1px solid #DDE3EA;border-radius:14px;padding:28px;color:#14213D">Ücret alınır mı?</p>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1400px;font-size:24px;color:#6B7587">Gün 1 · Modül 3 — Spec-odaklı geliştirme</p>
+<p style="position:absolute;right:96px;bottom:64px;font-size:24px;font-weight:600;letter-spacing:1px;color:#6B7587">37 / 45</p>
+
+</section>
+<section class="slide" id="m3-neden" style="background:#F5F6F2;color:#3E4A5E;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px">
+<div style="display:flex;flex-direction:column;gap:16px">
+<p style="font-size:24px;letter-spacing:3px;text-transform:uppercase;color:#2E6BD6;font-weight:600">Neden spec?</p>
+<h2 style="font-size:72px;font-weight:700;color:#14213D;line-height:1.1">Prompt geçicidir, spec kalıcıdır</h2>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:40px">
+<div style="display:flex;flex-direction:column;gap:24px;background:#FCFCFA;border:1px solid #DDE3EA;border-radius:16px;padding:44px">
+<div style="display:flex;align-items:center;gap:20px"><span style="display:inline-block;color:#6B7587;width:56px;height:56px"><svg viewBox="0 0 24 24" width="100%" height="100%" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span><p style="font-size:44px;font-weight:700;color:#6B7587">Sohbetle geliştirme</p></div>
+<p style="font-size:30px;line-height:1.4">Kararlar sohbet geçmişinde kalır</p>
+<p style="font-size:30px;line-height:1.4">Belirsizliği ajan sessizce doldurur</p>
+<p style="font-size:30px;line-height:1.4">İnceleyen yalnızca kodu görür</p>
+<p style="font-size:30px;line-height:1.4">Altı ay sonra “neden böyle?” cevapsız</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:24px;background:#0E1B33;border-radius:16px;padding:44px">
+<div style="display:flex;align-items:center;gap:20px"><span style="display:inline-block;color:#F0A33A;width:56px;height:56px"><svg viewBox="0 0 24 24" width="100%" height="100%" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V2H6.5A2.5 2.5 0 0 0 4 4.5v15z"/><path d="M6.5 17A2.5 2.5 0 0 0 4 19.5 2.5 2.5 0 0 0 6.5 22H20v-5"/></svg></span><p style="font-size:44px;font-weight:700;color:#F0A33A">Spec ile geliştirme</p></div>
+<p style="font-size:30px;line-height:1.4;color:#F5F6F2">Kararlar depoda, PR'da görünür</p>
+<p style="font-size:30px;line-height:1.4;color:#F5F6F2">Belirsizlik kod yazmadan sorulur</p>
+<p style="font-size:30px;line-height:1.4;color:#F5F6F2">İnceleyen niyeti ve kodu karşılaştırır</p>
+<p style="font-size:30px;line-height:1.4;color:#F5F6F2">Spec, ajan için de yeniden kullanılır</p>
+</div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1400px;font-size:24px;color:#6B7587">Gün 1 · Modül 3 — Spec-odaklı geliştirme</p>
+<p style="position:absolute;right:96px;bottom:64px;font-size:24px;font-weight:600;letter-spacing:1px;color:#6B7587">38 / 45</p>
+
+</section>
+<section class="slide" id="m3-spec" style="background:#F5F6F2;color:#3E4A5E;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:40px">
+<div style="display:flex;flex-direction:column;gap:16px">
+<p style="font-size:24px;letter-spacing:3px;text-transform:uppercase;color:#2E6BD6;font-weight:600">İyi bir spec'in parçaları</p>
+<h2 style="font-size:72px;font-weight:700;color:#14213D;line-height:1.1">Ne ve neden; nasıl değil</h2>
+</div>
+<div style="display:grid;grid-template-columns:3fr 2fr;gap:48px">
+<div style="display:flex;flex-direction:column;gap:14px">
+<div style="display:flex;gap:28px;align-items:baseline;border-bottom:1px solid #DDE3EA;padding-bottom:14px"><p style="font-size:30px;font-weight:700;color:#14213D;width:400px;flex-shrink:0">Kullanıcı hikâyesi</p><p style="font-size:28px">Kim, ne ister, neden?</p></div>
+<div style="display:flex;gap:28px;align-items:baseline;border-bottom:1px solid #DDE3EA;padding-bottom:14px"><p style="font-size:30px;font-weight:700;color:#14213D;width:400px;flex-shrink:0">Kabul senaryoları</p><p style="font-size:28px">Verilen / Olduğunda / O zaman</p></div>
+<div style="display:flex;gap:28px;align-items:baseline;border-bottom:1px solid #DDE3EA;padding-bottom:14px"><p style="font-size:30px;font-weight:700;color:#14213D;width:400px;flex-shrink:0">Uç durumlar</p><p style="font-size:28px">Sıfır tutar, aynı hesap, yetersiz bakiye</p></div>
+<div style="display:flex;gap:28px;align-items:baseline;border-bottom:1px solid #DDE3EA;padding-bottom:14px"><p style="font-size:30px;font-weight:700;color:#14213D;width:400px;flex-shrink:0">Fonksiyonel gereksinim</p><p style="font-size:28px">FR-001: Sistem … MUST …</p></div>
+<div style="display:flex;gap:28px;align-items:baseline;border-bottom:1px solid #DDE3EA;padding-bottom:14px"><p style="font-size:30px;font-weight:700;color:#14213D;width:400px;flex-shrink:0">Başarı ölçütleri</p><p style="font-size:28px">Ölçülebilir, teknolojiden bağımsız</p></div>
+<div style="display:flex;gap:28px;align-items:baseline;border-bottom:1px solid #DDE3EA;padding-bottom:14px"><p style="font-size:30px;font-weight:700;color:#14213D;width:400px;flex-shrink:0">Kapsam dışı</p><p style="font-size:28px">Bu sürümde yapılmayacaklar</p></div>
+</div>
+<div style="display:flex;flex-direction:column;gap:20px;background:#FDF1DE;border-radius:16px;padding:40px">
+<p style="font-size:24px;letter-spacing:3px;text-transform:uppercase;color:#9A5B00;font-weight:600">Belirsizlik işareti</p>
+<p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:26px;line-height:1.5;color:#14213D">[NEEDS CLARIFICATION: Farklı para birimli hesaplar arasında virman yapılabilir mi?]</p>
+<p style="font-size:28px;line-height:1.4;color:#14213D">Ajan tahmin etmek yerine işaretler. Kod yazılmadan önce iş birimi cevaplar.</p>
+</div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1400px;font-size:24px;color:#6B7587">Gün 1 · Modül 3 — Spec-odaklı geliştirme</p>
+<p style="position:absolute;right:96px;bottom:64px;font-size:24px;font-weight:600;letter-spacing:1px;color:#6B7587">39 / 45</p>
+
+</section>
+<section class="slide" id="m3-akis" style="background:#F5F6F2;color:#3E4A5E;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px">
+<div style="display:flex;flex-direction:column;gap:16px">
+<p style="font-size:24px;letter-spacing:3px;text-transform:uppercase;color:#2E6BD6;font-weight:600">GitHub Spec Kit · v1.2</p>
+<h2 style="font-size:72px;font-weight:700;color:#14213D;line-height:1.1">Her adım bir dosya üretir, her dosya incelenir</h2>
+</div>
+<div style="display:flex;align-items:stretch;gap:10px">
+<div style="flex:1;display:flex;flex-direction:column;gap:12px;background:#0E1B33;border-radius:14px;padding:26px 14px"><p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:20px;color:#F0A33A">constitution</p><p style="font-size:24px;color:#F5F6F2;font-weight:600">İlkeler</p><p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:17px;color:#8FA0BD">constitution.md</p></div>
+<div style="display:flex;align-items:center"><span style="display:inline-block;width:32px;height:18px"><svg viewBox="0 0 32 18" width="100%" height="100%" preserveAspectRatio="none"><path d="M0 6h20V0l12 9-12 9v-6H0z" fill="#9AA6B8"/></svg></span></div>
+<div style="flex:1;display:flex;flex-direction:column;gap:12px;background:#2E6BD6;border-radius:14px;padding:26px 14px"><p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:20px;color:#FFE2B5">specify</p><p style="font-size:24px;color:#F5F6F2;font-weight:600">Ne ve neden</p><p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:17px;color:#E1EAFB">spec.md</p></div>
+<div style="display:flex;align-items:center"><span style="display:inline-block;width:32px;height:18px"><svg viewBox="0 0 32 18" width="100%" height="100%" preserveAspectRatio="none"><path d="M0 6h20V0l12 9-12 9v-6H0z" fill="#9AA6B8"/></svg></span></div>
+<div style="flex:1;display:flex;flex-direction:column;gap:12px;background:#FCFCFA;border:2px dashed #2E6BD6;border-radius:14px;padding:26px 14px"><p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:20px;color:#2E6BD6">clarify</p><p style="font-size:24px;color:#14213D;font-weight:600">≤ 5 soru</p><p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:17px;color:#6B7587">spec.md ↻</p></div>
+<div style="display:flex;align-items:center"><span style="display:inline-block;width:32px;height:18px"><svg viewBox="0 0 32 18" width="100%" height="100%" preserveAspectRatio="none"><path d="M0 6h20V0l12 9-12 9v-6H0z" fill="#9AA6B8"/></svg></span></div>
+<div style="flex:1;display:flex;flex-direction:column;gap:12px;background:#2E6BD6;border-radius:14px;padding:26px 14px"><p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:20px;color:#FFE2B5">plan</p><p style="font-size:24px;color:#F5F6F2;font-weight:600">Nasıl</p><p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:17px;color:#E1EAFB">plan.md</p></div>
+<div style="display:flex;align-items:center"><span style="display:inline-block;width:32px;height:18px"><svg viewBox="0 0 32 18" width="100%" height="100%" preserveAspectRatio="none"><path d="M0 6h20V0l12 9-12 9v-6H0z" fill="#9AA6B8"/></svg></span></div>
+<div style="flex:1;display:flex;flex-direction:column;gap:12px;background:#2E6BD6;border-radius:14px;padding:26px 14px"><p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:20px;color:#FFE2B5">tasks</p><p style="font-size:24px;color:#F5F6F2;font-weight:600">Görevler</p><p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:17px;color:#E1EAFB">tasks.md</p></div>
+<div style="display:flex;align-items:center"><span style="display:inline-block;width:32px;height:18px"><svg viewBox="0 0 32 18" width="100%" height="100%" preserveAspectRatio="none"><path d="M0 6h20V0l12 9-12 9v-6H0z" fill="#9AA6B8"/></svg></span></div>
+<div style="flex:1;display:flex;flex-direction:column;gap:12px;background:#FCFCFA;border:2px dashed #2E6BD6;border-radius:14px;padding:26px 14px"><p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:20px;color:#2E6BD6">analyze</p><p style="font-size:24px;color:#14213D;font-weight:600">Tutarlılık</p><p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:17px;color:#6B7587">rapor</p></div>
+<div style="display:flex;align-items:center"><span style="display:inline-block;width:32px;height:18px"><svg viewBox="0 0 32 18" width="100%" height="100%" preserveAspectRatio="none"><path d="M0 6h20V0l12 9-12 9v-6H0z" fill="#9AA6B8"/></svg></span></div>
+<div style="flex:1;display:flex;flex-direction:column;gap:12px;background:#F0A33A;border-radius:14px;padding:26px 14px"><p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:20px;color:#14213D">implement</p><p style="font-size:24px;color:#14213D;font-weight:600">Kod + test</p><p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:17px;color:#3E4A5E">src/ · tests/</p></div>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:32px">
+<div style="display:flex;flex-direction:column;gap:12px;background:#FCFCFA;border:1px solid #DDE3EA;border-radius:16px;padding:32px">
+<p style="font-size:24px;letter-spacing:3px;text-transform:uppercase;color:#6B7587;font-weight:600">Kurulum · bir kez</p>
+<p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:22px;line-height:1.5;color:#14213D">specify init --here --integration copilot --script ps</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:12px;background:#FCFCFA;border:1px solid #DDE3EA;border-radius:16px;padding:32px">
+<p style="font-size:24px;letter-spacing:3px;text-transform:uppercase;color:#6B7587;font-weight:600">Kullanım · sohbette skill olarak</p>
+<p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:22px;line-height:1.5;color:#14213D">/speckit-specify · /speckit-plan · …</p>
+</div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1400px;font-size:24px;color:#6B7587">Gün 1 · Modül 3 — Spec-odaklı geliştirme · kesikli kutular isteğe bağlı · çıktılar specs/001-…/ altında</p>
+<p style="position:absolute;right:96px;bottom:64px;font-size:24px;font-weight:600;letter-spacing:1px;color:#6B7587">40 / 45</p>
+
+</section>
+<section class="slide" id="m3-anayasa" style="background:#0E1B33;color:#C5D0E3;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px">
+<div style="display:flex;flex-direction:column;gap:16px">
+<p style="font-size:24px;letter-spacing:3px;text-transform:uppercase;color:#F0A33A;font-weight:600">Anayasa · constitution.md</p>
+<h2 style="font-size:72px;font-weight:700;color:#F5F6F2;line-height:1.1">Erdağı Bank'ın beş değişmez ilkesi</h2>
+</div>
+<div style="display:grid;grid-template-columns:repeat(5, 1fr);gap:20px;flex:1">
+<div style="display:flex;flex-direction:column;gap:18px;background:#16274A;border-radius:16px;padding:32px"><p style="font-size:64px;font-weight:700;color:#F0A33A;line-height:1">I</p><p style="font-size:32px;font-weight:700;color:#F5F6F2;line-height:1.2">Önce test</p><p style="font-size:24px;line-height:1.4">Pazarlığa açık değil</p></div>
+<div style="display:flex;flex-direction:column;gap:18px;background:#16274A;border-radius:16px;padding:32px"><p style="font-size:64px;font-weight:700;color:#F0A33A;line-height:1">II</p><p style="font-size:32px;font-weight:700;color:#F5F6F2;line-height:1.2">Kişisel veri dışarı çıkmaz</p><p style="font-size:24px;line-height:1.4">Ad, TCKN, IBAN log'a yazılmaz</p></div>
+<div style="display:flex;flex-direction:column;gap:18px;background:#16274A;border-radius:16px;padding:32px"><p style="font-size:64px;font-weight:700;color:#F0A33A;line-height:1">III</p><p style="font-size:32px;font-weight:700;color:#F5F6F2;line-height:1.2">Para decimal'dır</p><p style="font-size:24px;line-height:1.4">double ve float yasak</p></div>
+<div style="display:flex;flex-direction:column;gap:18px;background:#16274A;border-radius:16px;padding:32px"><p style="font-size:64px;font-weight:700;color:#F0A33A;line-height:1">IV</p><p style="font-size:32px;font-weight:700;color:#F5F6F2;line-height:1.2">Result&lt;T&gt;, exception değil</p><p style="font-size:24px;line-height:1.4">HTTP'de ProblemDetails</p></div>
+<div style="display:flex;flex-direction:column;gap:18px;background:#16274A;border-radius:16px;padding:32px"><p style="font-size:64px;font-weight:700;color:#F0A33A;line-height:1">V</p><p style="font-size:32px;font-weight:700;color:#F5F6F2;line-height:1.2">Sadelik</p><p style="font-size:24px;line-height:1.4">Yeni paket ya da katman ancak gerekçeyle</p></div>
+</div>
+<p style="font-size:32px;color:#F5F6F2">Plan aşamasında her ilke tek tek kontrol edilir: <span style="color:#F0A33A;font-weight:600">Constitution Check</span>.</p>
+<p style="position:absolute;left:128px;bottom:64px;width:1400px;font-size:24px;color:#8FA0BD">Gün 1 · Modül 3 — Spec-odaklı geliştirme · ek kurallar: yalnızca kendi hesabı, parametreli SQL, insan incelemesi</p>
+<p style="position:absolute;right:96px;bottom:64px;font-size:24px;font-weight:600;letter-spacing:1px;color:#8FA0BD">41 / 45</p>
+
+</section>
+<section class="slide" id="m3-demo" style="background:#0E1B33;color:#C5D0E3;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:36px">
+<div style="display:flex;align-items:center;gap:24px">
+<p style="font-size:24px;letter-spacing:3px;text-transform:uppercase;font-weight:700;color:#14213D;background:#F0A33A;padding:10px 24px;border-radius:999px">Canlı demo</p>
+<p style="font-size:28px;color:#8FA0BD">D7</p>
+</div>
+<h2 style="font-size:68px;font-weight:700;color:#F5F6F2;line-height:1.1">Tek cümleden test edilmiş virmana</h2>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:48px">
+<div style="display:flex;flex-direction:column;gap:20px">
+<div style="display:flex;flex-direction:column;gap:6px"><h3 style="font-size:30px;font-weight:600;color:#F0A33A">specify init</h3><p style="font-size:26px;line-height:1.4">Spec Kit'i depoya kur</p></div>
+<div style="display:flex;flex-direction:column;gap:6px"><h3 style="font-size:30px;font-weight:600;color:#F0A33A">constitution</h3><p style="font-size:26px;line-height:1.4">Beş ilkeyi yaz</p></div>
+<div style="display:flex;flex-direction:column;gap:6px"><h3 style="font-size:30px;font-weight:600;color:#F0A33A">specify</h3><p style="font-size:26px;line-height:1.4">Talep cümlesini ver</p></div>
+<div style="display:flex;flex-direction:column;gap:6px"><h3 style="font-size:30px;font-weight:600;color:#F0A33A">clarify</h3><p style="font-size:26px;line-height:1.4">Soruları iş kararıyla cevapla</p></div>
+<div style="display:flex;flex-direction:column;gap:6px"><h3 style="font-size:30px;font-weight:600;color:#F0A33A">plan · tasks</h3><p style="font-size:26px;line-height:1.4">Teknik kararlar, görev listesi</p></div>
+<div style="display:flex;flex-direction:column;gap:6px"><h3 style="font-size:30px;font-weight:600;color:#F0A33A">implement</h3><p style="font-size:26px;line-height:1.4">Bitmiş hali yedekte: test ve HTTP isteği</p></div>
+</div>
+<div style="display:flex;flex-direction:column;gap:16px">
+<div style="background:#0A1428;border:1px solid #2A3D63;border-radius:16px;padding:26px;display:flex;flex-direction:column;gap:8px"><p style="font-size:24px;letter-spacing:3px;text-transform:uppercase;color:#8FA0BD;font-weight:600">specify</p><p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:24px;line-height:1.5;color:#F5F6F2">/speckit-specify Müşteri kendi hesapları arasında para aktarabilsin (virman). Bu aktarım, başka kişilere yapılan transferler için tanımlı günlük limitten bağımsız olsun.</p></div>
+<div style="background:#0A1428;border:1px solid #2A3D63;border-radius:16px;padding:26px;display:flex;flex-direction:column;gap:8px"><p style="font-size:24px;letter-spacing:3px;text-transform:uppercase;color:#8FA0BD;font-weight:600">clarify kararları</p><p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:24px;line-height:1.5;color:#F5F6F2">Limite tabi değil, sayılmaz · Başkasının hesabı → 404 · Farklı para birimi yok · Ücret yok</p></div>
+</div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1400px;font-size:24px;color:#8FA0BD">Başlangıç: yedek/d1-m2-son → hazır hali: yedek/d1-m3-son · docs/PROMPTLAR-GUN1.md</p>
+<p style="position:absolute;right:96px;bottom:64px;font-size:24px;font-weight:600;letter-spacing:1px;color:#8FA0BD">42 / 45</p>
+
+</section>
+<section class="slide" id="m3-sinirlar" style="background:#F5F6F2;color:#3E4A5E;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px">
+<div style="display:flex;flex-direction:column;gap:16px">
+<p style="font-size:24px;letter-spacing:3px;text-transform:uppercase;color:#2E6BD6;font-weight:600">Ne zaman spec, ne zaman sohbet?</p>
+<h2 style="font-size:72px;font-weight:700;color:#14213D;line-height:1.1">Her iş için değil; belirsizliğin pahalı olduğu işler için</h2>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:40px">
+<div style="display:flex;flex-direction:column;gap:22px;background:#0E1B33;border-radius:16px;padding:44px">
+<p style="font-size:36px;font-weight:700;color:#F0A33A">Spec Kit kullan</p>
+<p style="font-size:30px;line-height:1.35;color:#F5F6F2">Yeni iş kuralı, para hareketi</p>
+<p style="font-size:30px;line-height:1.35;color:#F5F6F2">Birden fazla ekibi ilgilendiren özellik</p>
+<p style="font-size:30px;line-height:1.35;color:#F5F6F2">Denetimde “neden?” sorulacak değişiklik</p>
+<p style="font-size:30px;line-height:1.35;color:#F5F6F2">Talebi iş birimi yazıyor</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:22px;background:#FCFCFA;border:1px solid #DDE3EA;border-radius:16px;padding:44px">
+<p style="font-size:36px;font-weight:700;color:#2E6BD6">Plan modu yeter</p>
+<p style="font-size:30px;line-height:1.35">Hata düzeltme, küçük refactor</p>
+<p style="font-size:30px;line-height:1.35">Tek dosyalık değişiklik</p>
+<p style="font-size:30px;line-height:1.35">Kuralı zaten net olan iş</p>
+<p style="font-size:30px;line-height:1.35">Keşif ve prototip</p>
+</div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1400px;font-size:24px;color:#6B7587">Gün 1 · Modül 3 — Spec-odaklı geliştirme</p>
+<p style="position:absolute;right:96px;bottom:64px;font-size:24px;font-weight:600;letter-spacing:1px;color:#6B7587">43 / 45</p>
+
+</section>
+<section class="slide" id="m3-kurum" style="background:#F5F6F2;color:#3E4A5E;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px">
+<div style="display:flex;flex-direction:column;gap:16px">
+<p style="font-size:24px;letter-spacing:3px;text-transform:uppercase;color:#2E6BD6;font-weight:600">Kurumunuzda bu ne demek?</p>
+<h2 style="font-size:72px;font-weight:700;color:#14213D;line-height:1.1">Analist, geliştirici ve denetçi aynı dosyayı okur</h2>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:32px">
+<div style="display:flex;flex-direction:column;gap:20px;background:#FCFCFA;border:1px solid #DDE3EA;border-radius:16px;padding:40px">
+<span style="display:inline-block;color:#2E6BD6;width:56px;height:56px"><svg viewBox="0 0 24 24" width="100%" height="100%" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.9M16 3.1a4 4 0 0 1 0 7.8"/></svg></span>
+<p style="font-size:36px;font-weight:700;color:#14213D;line-height:1.2">İş analisti</p>
+<p style="font-size:28px;line-height:1.4">spec.md'yi okur, clarify sorularını cevaplar, onaylar.</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:20px;background:#FCFCFA;border:1px solid #DDE3EA;border-radius:16px;padding:40px">
+<span style="display:inline-block;color:#2E6BD6;width:56px;height:56px"><svg viewBox="0 0 24 24" width="100%" height="100%" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m16 18 6-6-6-6M8 6l-6 6 6 6"/></svg></span>
+<p style="font-size:36px;font-weight:700;color:#14213D;line-height:1.2">Teknik lider</p>
+<p style="font-size:28px;line-height:1.4">plan.md'yi ve anayasa kontrolünü inceler.</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:20px;background:#FCFCFA;border:1px solid #DDE3EA;border-radius:16px;padding:40px">
+<span style="display:inline-block;color:#2E6BD6;width:56px;height:56px"><svg viewBox="0 0 24 24" width="100%" height="100%" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76z"/><path d="m9 12 2 2 4-4"/></svg></span>
+<p style="font-size:36px;font-weight:700;color:#14213D;line-height:1.2">İç denetim</p>
+<p style="font-size:28px;line-height:1.4">Talepten koda izlenebilirlik: hepsi aynı PR'da.</p>
+</div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1400px;font-size:24px;color:#6B7587">Gün 1 · Modül 3 — Spec-odaklı geliştirme</p>
+<p style="position:absolute;right:96px;bottom:64px;font-size:24px;font-weight:600;letter-spacing:1px;color:#6B7587">44 / 45</p>
+
+</section>
+<section class="slide" id="g1-kapanis" data-transition="fade" style="background:#0E1B33;color:#C5D0E3;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px">
+<div style="display:flex;flex-direction:column;gap:16px">
+<p style="font-size:24px;letter-spacing:3px;text-transform:uppercase;color:#F0A33A;font-weight:600">Gün 1 · Kapanış</p>
+<h2 style="font-size:72px;font-weight:700;color:#F5F6F2;line-height:1.1">Bugün Copilot'a kurumun dilini öğrettik</h2>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:32px">
+<div style="display:flex;flex-direction:column;gap:16px;background:#16274A;border-radius:16px;padding:40px"><p style="font-size:28px;font-weight:700;color:#F0A33A">M1</p><p style="font-size:30px;line-height:1.35;color:#F5F6F2">Çıktı olasılıksaldır; doğrulamak geliştiricinin işidir.</p></div>
+<div style="display:flex;flex-direction:column;gap:16px;background:#16274A;border-radius:16px;padding:40px"><p style="font-size:28px;font-weight:700;color:#F0A33A">M2</p><p style="font-size:30px;line-height:1.35;color:#F5F6F2">Standartlar talimat, skill ve agent olarak depoda yaşar.</p></div>
+<div style="display:flex;flex-direction:column;gap:16px;background:#16274A;border-radius:16px;padding:40px"><p style="font-size:28px;font-weight:700;color:#F0A33A">M3</p><p style="font-size:30px;line-height:1.35;color:#F5F6F2">Belirsizlik kod yazılmadan, spec'te çözülür.</p></div>
+</div>
+<div style="display:flex;align-items:center;gap:32px;background:#F0A33A;border-radius:16px;padding:40px 48px">
+<span style="display:inline-block;color:#14213D;width:64px;height:64px;flex-shrink:0"><svg viewBox="0 0 24 24" width="100%" height="100%" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 22h4"/><path d="M15.1 14c.2-1 .7-1.7 1.5-2.5A6 6 0 1 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/></svg></span>
+<div style="display:flex;flex-direction:column;gap:8px">
+<p style="font-size:24px;letter-spacing:3px;text-transform:uppercase;color:#14213D;font-weight:600">Yarın</p>
+<p style="font-size:44px;font-weight:700;color:#14213D;line-height:1.2">Spec'i yazdık. Peki doğru çalıştığını nereden bileceğiz?</p>
+</div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1400px;font-size:24px;color:#8FA0BD">Ertürk Erdağı · linkedin.com/in/erturkerdagi · repo: ErdagiBank · yedek dallar README'de</p>
+<p style="position:absolute;right:96px;bottom:64px;font-size:24px;font-weight:600;letter-spacing:1px;color:#8FA0BD">45 / 45</p>
+
+</section>
+</div>
+<div id="bar"><button id="first" title="İlk slayt (Home)">⏮</button><button id="prev" title="Önceki (←)">◀ Geri</button><span id="num"></span><button id="next" title="Sonraki (→, boşluk)">İleri ▶</button><button id="last" title="Son slayt (End)">⏭</button><button id="fs" title="Tam ekran (F)">Tam ekran</button></div>
+<script>
+const S=[...document.querySelectorAll('.slide')],st=document.getElementById('stage'),num=document.getElementById('num');
+let i=Math.max(0,Math.min(S.length-1,(parseInt(location.hash.slice(1))||1)-1)),t;
+function fit(){const s=Math.min(innerWidth/1920,(innerHeight-56)/1080);st.style.transform='translate(-50%,-50%) scale('+s+')'}
+function show(n){i=Math.max(0,Math.min(S.length-1,n));S.forEach((e,k)=>e.classList.toggle('on',k===i));num.textContent=(i+1)+' / '+S.length;history.replaceState(null,'','#'+(i+1));
+prev.disabled=first.disabled=i===0;next.disabled=last.disabled=i===S.length-1}
+prev.onclick=()=>show(i-1);next.onclick=()=>show(i+1);first.onclick=()=>show(0);last.onclick=()=>show(S.length-1);
+fs.onclick=()=>{document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen()};
+addEventListener('keydown',e=>{if(['ArrowRight','PageDown',' ','Enter'].includes(e.key)){e.preventDefault();show(i+1)}else if(['ArrowLeft','PageUp','Backspace'].includes(e.key)){e.preventDefault();show(i-1)}else if(e.key==='Home')show(0);else if(e.key==='End')show(S.length-1);else if(e.key==='f'||e.key==='F')fs.onclick()});
+let x0=null;addEventListener('touchstart',e=>{x0=e.touches[0].clientX});addEventListener('touchend',e=>{if(x0===null)return;const d=e.changedTouches[0].clientX-x0;if(Math.abs(d)>50)show(i+(d<0?1:-1));x0=null});
+addEventListener('resize',fit);fit();show(i);
+</script></body></html>
